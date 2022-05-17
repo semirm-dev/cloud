@@ -1,0 +1,103 @@
+version: "3.8"
+
+services:
+  offer:
+    image: semirm/connect-offer:1
+    build:
+      context: .
+      dockerfile: cmd/offer/Dockerfile
+    container_name: connect_offer
+    ports:
+      - "8001:8001"
+    command:
+      - -connStr=host=connect_postgres port=5432 dbname=connect_condition user=postgres password=postgres sslmode=disable
+    depends_on:
+      - db
+    networks:
+      - connect_n
+  condition:
+    image: semirm/connect-condition:1
+    build:
+      context: .
+      dockerfile: cmd/condition/Dockerfile
+    container_name: connect_condition
+    ports:
+      - "8002:8002"
+    command:
+      - -connStr=host=connect_postgres port=5432 dbname=connect_condition user=postgres password=postgres sslmode=disable
+    depends_on:
+      - db
+    networks:
+      - connect_n
+  dumper:
+    image: semirm/connect-dumper:1
+    build:
+      context: .
+      dockerfile: cmd/dumper/Dockerfile
+    container_name: connect_dumper
+    ports:
+      - "8003:8003"
+    networks:
+      - connect_n
+  notifications:
+    image: semirm/connect-notifications:1
+    build:
+      context: .
+      dockerfile: cmd/notifications/Dockerfile
+    container_name: connect_notifications
+    ports:
+      - "8004:8004"
+    networks:
+      - connect_n
+  lookup:
+    image: semirm/connect-lookup:1
+    build:
+      context: .
+      dockerfile: cmd/lookup/Dockerfile
+    container_name: connect_lookup
+    ports:
+      - "8005:8005"
+    command:
+      - -connStr=host=connect_postgres port=5432 dbname=connect_condition user=postgres password=postgres sslmode=disable
+    depends_on:
+      - db
+    networks:
+      - connect_n
+  gateway:
+    image: semirm/connect-gateway:1
+    build:
+      context: .
+      dockerfile: cmd/gateway/Dockerfile
+    container_name: connect_gateway
+    command:
+      - -offer_uri=connect_offer:8001
+      - -condition_uri=connect_condition:8002
+      - -lookup_uri=connect_lookup:8005
+      - -usr=default
+      - -pwd=default
+    ports:
+      - "8000:8000"
+    depends_on:
+      - offer
+      - condition
+      - dumper
+      - notifications
+      - lookup
+    networks:
+      - connect_n
+  db:
+    image: postgres:latest
+    container_name: connect_postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=connect_condition
+    ports:
+      - "5432:5432"
+#    volumes:
+#      - ./db-data/:/var/lib/postgresql/data/
+#      - ./condition/repository/migrations/seed/created_database.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    networks:
+      - connect_n
+networks:
+  connect_n:

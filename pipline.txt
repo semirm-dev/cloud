@@ -1,0 +1,49 @@
+## Single pipline for CI/CD
+
+* source: Git
+    - git push source code
+* build: CodeBuild (buildspec.yml)
+    #CI
+    - build source code
+    - docker build
+    - docker push to Container Registry (ECR)
+    #CD
+    - kubectl apply -f deployment.yml
+
+------------------
+
+## Two/separate piplines for CI/CD
+
+1.) Source code to container registry
+#CI - Git to ECR
+* source: Git
+    - git push source code
+* build: CodeBuild (buildspec.yml)
+    - build source code
+    - docker build
+    - docker push to Container Registry (ECR)
+
+2.) Deploy docker image
+#CD - ECR to EKS
+* source: Amazon ECR
+    - detects changes in ECR
+* build: CodeBuild (buildspec.yml)
+    - install kubectl
+    - apply kubeconfig
+    - kubectl apply -f deployment.yml
+
+------------------
+
+## CI/CD with FluxCD
+1.) Source code to container registry
+#CI - Git to ECR
+* source: Git
+    - git push source code
+* build: CodeBuild (buildspec.yml)
+    - build source code
+    - docker build
+    - docker push to Container Registry (ECR)
+
+2.) Deploy docker image
+#CD - ECR to EKS
+* FluxCD watches for changes in ECR and deployment.yml

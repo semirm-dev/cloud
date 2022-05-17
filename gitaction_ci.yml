@@ -1,0 +1,39 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ main ]
+    
+env:
+  DOCKER_USER: ${{secrets.DOCKER_USER}}
+  DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: docker login
+      run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD  
+    
+    - name: Docker build Conditions service
+      run: docker build . --file cmd/condition/Dockerfile --tag $DOCKER_USER/connect-condition:1
+      
+    - name: Docker Push Conditions service
+      run: docker push $DOCKER_USER/connect-condition:1
+  
+    - name: Docker build Offer service
+      run: docker build . --file cmd/offer/Dockerfile --tag $DOCKER_USER/connect-offer:1
+      
+    - name: Docker Push Offer service
+      run: docker push $DOCKER_USER/connect-offer:1
+      
+    - name: Docker build Gateway service
+      run: docker build . --file cmd/gateway/Dockerfile --tag $DOCKER_USER/connect-gateway:1
+      
+    - name: Docker Push Gateway service
+      run: docker push $DOCKER_USER/connect-gateway:1
