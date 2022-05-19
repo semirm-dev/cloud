@@ -1,0 +1,18 @@
+control loop
+- software that tracks state of resource
+- reconciliation loop: want x state -> check x state on cluster -> sync state
+
+crd
+- custom resource definition
+- custom k8s object
+- state tracked by controller
+
+controller
+- reconciliation logic
+- tracks crd state
+- updates resource state
+
+operator
+- custom control loop, custom reconciliation logic
+- tracks either builtin resources (pods, services...) or custom resources
+- deployed with crd and controller
