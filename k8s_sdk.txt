@@ -16,3 +16,7 @@ operator
 - custom control loop, custom reconciliation logic
 - tracks either builtin resources (pods, services...) or custom resources
 - deployed with crd and controller
+
+
+workflow
+docker build -> docker push -> helm build (dependency update + package) -> helm push -> helm apply (upgrade)
