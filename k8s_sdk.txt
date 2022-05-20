@@ -19,4 +19,4 @@ operator
 
 
 workflow
-docker build -> docker push -> helm build (dependency update + package) -> helm push -> helm apply (upgrade)
+docker build -> docker push -> helm build (dependency update + package) -> helm push -> helm upgrade|kubectl apply
