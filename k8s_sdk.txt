@@ -1,3 +1,5 @@
+k8s operators
+
 control loop
 - software that tracks state of resource
 - reconciliation loop: want x state -> check x state on cluster -> sync state
@@ -13,10 +15,22 @@ controller
 - updates resource state
 
 operator
-- custom control loop, custom reconciliation logic
-- tracks either builtin resources (pods, services...) or custom resources
-- deployed with crd and controller
+- crd + controller
 
+helm charts
 
-workflow
-docker build -> docker push -> helm build (dependency update + package) -> helm push -> helm upgrade|kubectl apply
+1.) Generate crds
+controller-gen -> generate config/crd/proj.yml manifest based on api/v1/proj_types.go
+
+2.) Resolve values and create basic “template/chart” for each project
+- copy values.tpl.yml to proj/values.yml
+- copy chart.tpl.yml to proj/chart.yml
+- replace tpl values
+
+3.) Manifests and charts per project
+helm dependency update -> create chart dependencies for project in charts/*.tgz, based on current charts.yml
+helm template <args> -> create build/proj.yml manifest, k8s native manifest
+
+4.) Build final helm chart, for entire solution (root project)
+helm dependency update -> create dependencies for bundle chart in charts/*.tgz, based on current charts.yml
+helm package . -d $buildDir -> create final helm bundled chart to be deployed to k8s, based on charts.yml and /charts/*
