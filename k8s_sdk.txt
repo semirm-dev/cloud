@@ -34,3 +34,12 @@ helm template <args> -> create build/proj.yml manifest, k8s native manifest
 4.) Build final helm chart, for entire solution (root project)
 helm dependency update -> create dependencies for bundle chart in charts/*.tgz, based on current charts.yml
 helm package . -d $buildDir -> create final helm bundled chart to be deployed to k8s, based on charts.yml and /charts/*
+
+kubectl get pods -o json | jq '.items[0].status.initContainerStatuses[] | {image: .image, imageId: .imageID}'
+kubectl get pods -o json | jq '[.items[].status.initContainerStatuses[]? | {image: .image, imageId: .imageID}]'
+kubectl get pods -o json | jq '[.items[].status.initContainerStatuses[]? | select(.image == "mydocker/image") | {image: .image, imageId: .imageID}]'
+
+new operator
+kubebuilder init  --repo opey -> init basic project structure
+kubebuilder create api --group my-opey --version v1 --kind Opey -> create crd (go) and controller (go)
+controller-gen <args> -> create k8s yaml manifest from go definitions
