@@ -42,6 +42,9 @@ $ helm template <args> -> create build/proj.yml manifest, k8s native manifest
 $ helm dependency update -> create dependencies for bundle chart in charts/*.tgz, based on current charts.yml
 $ helm package . -d $buildDir -> create final helm bundled chart to be deployed to k8s, based on charts.yml and /charts/*
 
+5.) Apply helm charts
+$ helm upgrade --install <release_name> <chart_name/repo> (or helm install)
+
 -- filter resources
 $ kubectl get pods -o json | jq '.items[0].status.initContainerStatuses[] | {image: .image, imageId: .imageID}'
 $ kubectl get pods -o json | jq '[.items[].status.initContainerStatuses[]? | {image: .image, imageId: .imageID}]'
