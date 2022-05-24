@@ -43,3 +43,5 @@ new operator
 kubebuilder init  --repo opey -> init basic project structure
 kubebuilder create api --group my-opey --version v1 --kind Opey -> create crd (go) and controller (go)
 controller-gen <args> -> create k8s yaml manifest from go definitions
+go run main.go -> run operator, or run as docker container
+kubectl apply -f <config/crd/*.yaml> -> apply crd on k8s, verify with kubectl get crd
