@@ -88,6 +88,7 @@ spec:
   externalTrafficPolicy: Local
 
 
-# LoadBalancer service requires its own load balancer and publich IP, n services = n load balancers + public IPs
+# - LoadBalancer service requires its own load balancer and publich IP, n services = n load balancers + public IPs
 # If we have one api gateway to expose, it might be enough. But if we have multiple api gateways, we might want to use Ingress.
-# Ingress requires only one, host and path is used to forward traffic to different services, n services = 1 Ingress (load balancer + IP)
+# - Ingress requires only one, host and path is used to forward traffic to different services, n services = 1 Ingress (load balancer + IP)
+# Multiple hosts (foo.example.com and bar.example.com) should/could point to same Ingress Controller IP - this is the difference from LoadBalancer
