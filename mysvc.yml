@@ -77,4 +77,5 @@ spec:
     targetPort: 8000
   # always redirect traffic to pod on a node where connection was initialized!!
   # use with caution! traffic will never be redirected to other nodes!!
+  # also client's IP should remain same, because no additional network (node) hop happens
   externalTrafficPolicy: Local
