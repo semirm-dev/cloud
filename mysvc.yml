@@ -75,4 +75,6 @@ spec:
   ports:
   - port: 80
     targetPort: 8000
-  externalTrafficPolicy: Local # always redirect traffic to pod on a node where connection was initialized!!
+  # always redirect traffic to pod on a node where connection was initialized!!
+  # use with caution! traffic will never be redirected to other nodes!!
+  externalTrafficPolicy: Local
