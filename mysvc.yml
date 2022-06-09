@@ -30,6 +30,13 @@ spec:
             "-condition_uri=condition-clusterip-svc:8082",
             "-usr=default", "-pwd=default"
           ]
+          resources:
+            limits:
+              cpu: 500m
+              memory: 100Mi
+            requests:
+              cpu: 100m
+              memory: 50Mi
 ---
 apiVersion: v1
 kind: Service
