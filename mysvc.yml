@@ -79,3 +79,7 @@ spec:
   # use with caution! traffic will never be redirected to other nodes!!
   # also client's IP should remain same, because no additional network (node) hop happens
   externalTrafficPolicy: Local
+
+
+# LoadBalancer service requires its own load balancer and publich IP, n services = n load balancers + public IPs
+# Ingress requires only one, host and path is used to forward traffic to different services, n services = 1 Ingress (load balancer + IP)
