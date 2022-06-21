@@ -85,4 +85,5 @@ $ kubectl get pods -o json | jq '[.items[].status.initContainerStatuses[]? | sel
 --- best option to store persistent data, it will survive node/pod crash
 -- PersistentVolume{}, nfs volume definitions, cluster level, not used in pods directly
 -- PersistnVolumeClaim{}, used in pod definitions to request PersistentVolume
--- configMap{}, each entry of ConfigMap will create a file to container
+-- configMap{}, each entry of ConfigMap will create a file to container, all files are updated automatically (but not in processes)
+-- secret{}, stored on tmpfs (memory), encrypted, stored only on nodes that run pods that need access to
