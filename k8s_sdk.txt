@@ -79,8 +79,8 @@ $ kubectl get pods -o json | jq '[.items[].status.initContainerStatuses[]? | sel
 -- gitRepo{}, emptyDir{} with github repository branch as initial content, tied to pod lifecycle
 -- hostPath{}, filesystem from node (host) where pod is scheduled, tied to node lifecycle
 -- NAS (network attached storage) volumes | NFS (network file system):
---- not tied to kubernetes, its stored on remote location (cloud)
---- best option to store persistent data, it will survive node/pod restarts
---- gcePersistentDisk, awsElasticBlockStore, azureFile, azureDisk...
+--- types: gcePersistentDisk, awsElasticBlockStore, azureFile, azureDisk...
+--- lifecycle not tied to node/pod, storage on remote location (cloud)
+--- best option to store persistent data, it will survive node/pod crash
 - PersistentVolume, nfs volume definitions, cluster level, not used in pods directly
 - PersistnVolumeClaim, used in pod definitions to request PersistentVolume
