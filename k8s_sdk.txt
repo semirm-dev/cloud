@@ -1,5 +1,4 @@
 -- k8s operators
-
 control loop
 - software that tracks state of resource
 - reconciliation loop: want x state -> check x state on cluster -> sync state
@@ -17,6 +16,7 @@ controller
 operator
 - crd + controller
 
+
 -- create new operator
 $ kubebuilder init  --repo opey -> init basic project structure
 $ kubebuilder create api --group my-opey --version v1 --kind Opey -> create crd (go) and controller (go)
@@ -24,8 +24,8 @@ $ controller-gen <args> -> create k8s yaml manifest from go definitions
 $ go run main.go -> run operator, or run as docker container
 $ kubectl apply -f <config/crd/*.yaml> -> apply crd on k8s, verify with kubectl get crd
 
--- helm charts
 
+-- helm charts
 1.) Generate crds
 $ controller-gen <args> -> generate config/crd/proj.yml manifest based on api/v1/proj_types.go
 
@@ -45,7 +45,30 @@ $ helm package . -d $buildDir -> create final helm bundled chart to be deployed 
 5.) Apply helm charts
 $ helm upgrade --install <release_name> <chart_name/repo> (or helm install)
 
+TLDR; helm charts
+- controller-gen <args>, generate crd.yaml from _types.go
+- check values.yaml, will be used in template.yaml
+- helm dependency update, get dep charts from charts.yaml to charts/
+- helm package . -d build/, create helm chart from charts.yaml and charts/*
+- helm upgrade --install <rel_name> <chart_chart>, apply charts
+
+
 -- filter resources
 $ kubectl get pods -o json | jq '.items[0].status.initContainerStatuses[] | {image: .image, imageId: .imageID}'
 $ kubectl get pods -o json | jq '[.items[].status.initContainerStatuses[]? | {image: .image, imageId: .imageID}]'
 $ kubectl get pods -o json | jq '[.items[].status.initContainerStatuses[]? | select(.image == "mydocker/image") | {image: .image, imageId: .imageID}]'
+
+
+-- containers
+- each container should run only one process
+- ENTRYPOINT[], run container process
+- CMD[], use to setup default args for ENTRYPOINT
+- filesystem isolated per container
+
+-- pods
+- group multiple containers together as a single unit
+- multiple containers in same pod share same linux network and uts namespace but not filesystem
+- all pods in all nodes can see each other, same network space, no NAT needed
+- pods are single scalable units, can not scale single container in pod, but the whole pod
+- use volumes to share data across all containers in a pod
+- 
