@@ -61,9 +61,9 @@ $ kubectl get pods -o json | jq '[.items[].status.initContainerStatuses[]? | sel
 
 -- containers
 - each container should run only one process
-- ENTRYPOINT[], run container process
-- CMD[], use to setup default args for ENTRYPOINT
-- filesystem isolated per container
+- ENTRYPOINT[], executed when container is started, run your app
+- CMD[], arguments to pass to ENTRYPOINT
+- filesystem is isolated per container
 
 -- pods
 - group multiple containers together as a single unit
@@ -73,8 +73,14 @@ $ kubectl get pods -o json | jq '[.items[].status.initContainerStatuses[]? | sel
 - use volumes to share data across all containers in a pod
 - define volumes in pod definition
 - mount those volumes in container definition
-- volumes lifecycle is tied to pod, if pod dies then volumes die also
+- volumes lifecycle is tied to pod (most of volume types), if pod dies then volumes die also
 - volume types:
--- emptyDir{}, empty directory
--- gitRepo{}, emptyDir{} with github repository branch as initial content
--- hostPath{}, filesystem from node (host) where pod is scheduled
+-- emptyDir{}, empty directory, tied to pod lifecycle
+-- gitRepo{}, emptyDir{} with github repository branch as initial content, tied to pod lifecycle
+-- hostPath{}, filesystem from node (host) where pod is scheduled, tied to node lifecycle
+-- NAS (network attached storage) volumes | NFS (network file system):
+--- not tied to kubernetes, its stored on remote location (cloud)
+--- best option to store persistent data, it will survive node/pod restarts
+--- gcePersistentDisk, awsElasticBlockStore, azureFile, azureDisk...
+- PersistentVolume, nfs volume definitions, cluster level, not used in pods directly
+- PersistnVolumeClaim, used in pod definitions to request PersistentVolume
