@@ -71,4 +71,10 @@ $ kubectl get pods -o json | jq '[.items[].status.initContainerStatuses[]? | sel
 - all pods in all nodes can see each other, same network space, no NAT needed
 - pods are single scalable units, can not scale single container in pod, but the whole pod
 - use volumes to share data across all containers in a pod
-- 
+- define volumes in pod definition
+- mount those volumes in container definition
+- volumes lifecycle is tied to pod, if pod dies then volumes die also
+- volume types:
+-- emptyDir{}, empty directory
+-- gitRepo{}, emptyDir{} with github repository branch as initial content
+-- hostPath{}, filesystem from node (host) where pod is scheduled
