@@ -59,6 +59,10 @@ $ kubectl get pods -o json | jq '[.items[].status.initContainerStatuses[]? | {im
 $ kubectl get pods -o json | jq '[.items[].status.initContainerStatuses[]? | select(.image == "mydocker/image") | {image: .image, imageId: .imageID}]'
 
 
+kubectl config set-context --current --namespace=my-ns
+kubectl exec -it mysvc-2356236189-frggk -- bash
+
+
 -- containers
 - each container should run only one process
 - ENTRYPOINT[], executed when container is started, run your app

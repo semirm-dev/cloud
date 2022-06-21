@@ -3,26 +3,18 @@ docker run --name mysvc -d -p 8080:8080 semirm/mysvc:1.0.0
 docker login
 docker push semirm/mysvc:2
 
+docker-compose up -d --force-recreate --build
+docker exec -it 97e37cc2d825 sh
+
+-- minikube
 brew install hyperkit
 minikube start --vm=true --driver=hyperkit # required for MacOS
 minikube addons enable ingress
 
-kubectl create -f deploy/mysvc.yml
-kubectl config set-context --current --namespace=my-ns
-
 kubectl get ingress # get address
 # add to /etc/hosts: 172.17.0.15 mysvc.com
 
-kubectl apply -f deploy/mysvc.yml
-kubectl delete -f deploy/mysvc.yml
-
 ---------------------------------------------------
-
-docker-compose up -d --force-recreate --build
-docker exec -it 97e37cc2d825 sh
-kubectl exec -it mysvc-2356236189-frggk -- bash
-
---------
 
 oci: open container initiative (define standards)
 cri: container runtime interface
