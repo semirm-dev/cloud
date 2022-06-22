@@ -62,6 +62,7 @@ $ kubectl get pods -o json | jq '[.items[].status.initContainerStatuses[]? | sel
 kubectl config set-context --current --namespace=my-ns
 kubectl exec -it mysvc-2356236189-frggk -- bash
 kubectl rollout restart deployment <deployment name>
+kubectl rollout status deployment <deployment name>
 
 
 -- containers
