@@ -75,6 +75,11 @@ kubectl rollout resume deployment <deployment_name>
 - use minReadySeconds and readinesProbe to automatically block fault rollouts
 
 
+kubectl config view, display config info, available clusters and contexts
+kubectl config current-context <context_name>, set current context to use
+kubectl config set-context --current --namespace=<mynamespace>, modify current-context, set default namespace
+
+
 -- containers
 - each container should run only one process
 - ENTRYPOINT[], executed when container is started, run your app
