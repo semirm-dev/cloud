@@ -51,6 +51,7 @@ TLDR; helm charts
 - helm dependency update, get dep charts from charts.yaml to charts/
 - helm package . -d build/, create helm chart from charts.yaml and charts/*
 - helm upgrade --install <rel_name> <chart_chart>, apply charts
+- helm rollback <rel_name> <rev_num>, revert release to specified revision
 
 
 -- filter resources
