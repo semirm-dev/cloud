@@ -60,9 +60,9 @@ $ kubectl get pods -o json | jq '[.items[].status.initContainerStatuses[]? | {im
 $ kubectl get pods -o json | jq '[.items[].status.initContainerStatuses[]? | select(.image == "mydocker/image") | {image: .image, imageId: .imageID}]'
 
 
--- rollout deployment
-kubectl config set-context --current --namespace=my-ns
 kubectl exec -it mysvc-2356236189-frggk -- bash
+
+-- rollout deployment
 kubectl rollout restart deployment <deployment_name>, force deployment
 kubectl rollout undo deployment <deployment_name>, revert last deployment
 kubectl rollout status deployment <deployment_name>
@@ -73,7 +73,6 @@ kubectl rollout resume deployment <deployment_name>
 
 - use maxSurge and maxUnavailable to control rate of rollout
 - use minReadySeconds and readinesProbe to automatically block fault rollouts
-
 
 kubectl config view, display config info, available clusters and contexts
 kubectl config current-context <context_name>, set current context to use
@@ -90,7 +89,7 @@ kubectl config set-context --current --namespace=<mynamespace>, modify current-c
 - group multiple containers together as a single unit
 - multiple containers in same pod share same linux network and uts namespace but not filesystem
 - all pods in all nodes can see each other, same network space, no NAT needed
-- pods are single scalable units, can not scale single container in pod, but the whole pod
+- pods are single scalable units, can not scale single container in pod, only a whole pod
 - use volumes to share data across all containers in a pod
 - volume is defined in pod definition
 - volumeMount is used in container definition to mount volume
