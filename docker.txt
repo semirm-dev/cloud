@@ -3,7 +3,7 @@ docker run --name mysvc -d -p 8080:8080 semirm/mysvc:1.0.0
 docker login
 docker push semirm/mysvc:2
 
-docker-compose up -d --force-recreate --build
+docker-compose up --force-recreate --build
 docker exec -it 97e37cc2d825 sh
 
 -- minikube

@@ -26,26 +26,6 @@ $ kubectl apply -f <config/crd/*.yaml> -> apply crd on k8s, verify with kubectl 
 
 
 -- helm charts
-1.) Generate crds
-$ controller-gen <args> -> generate config/crd/proj.yml manifest based on api/v1/proj_types.go
-
-2.) Resolve values and create basic “template/chart” for each project
-- copy values.tpl.yml to proj/values.yml
-- copy chart.tpl.yml to proj/chart.yml
-- replace tpl values
-
-3.) Manifests and charts per project
-$ helm dependency update -> create chart dependencies for project in charts/*.tgz, based on current charts.yml
-$ helm template <args> -> create build/proj.yml manifest, k8s native manifest
-
-4.) Build final helm chart, for entire solution (root project)
-$ helm dependency update -> create dependencies for bundle chart in charts/*.tgz, based on current charts.yml
-$ helm package . -d $buildDir -> create final helm bundled chart to be deployed to k8s, based on charts.yml and /charts/*
-
-5.) Apply helm charts
-$ helm upgrade --install <release_name> <chart_name/repo> (or helm install)
-
-TLDR; helm charts
 - controller-gen <args>, generate crd.yaml from _types.go
 - check values.yaml, will be used in template.yaml
 - helm dependency update, get dep charts from charts.yaml to charts/
@@ -104,6 +84,6 @@ kubectl config set-context --current --namespace=<mynamespace>, modify current-c
 --- lifecycle not tied to node/pod, storage on remote location (cloud)
 --- best option to store persistent data, it will survive node/pod crash
 -- PersistentVolume{}, nfs volume definitions, cluster level, not used in pods directly
--- PersistnVolumeClaim{}, used in pod definitions to request PersistentVolume
+-- PersistentVolumeClaim{}, used in pod definitions to request PersistentVolume
 -- configMap{}, each entry of ConfigMap will create a file to container, all files are updated automatically (but not in processes)
 -- secret{}, stored on tmpfs (memory), encrypted, stored only on nodes that run pods that need access to
