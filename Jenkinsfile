@@ -11,8 +11,8 @@ pipeline {
     }
 
     environment {
-        SLACK_CHANNEL = "#exchange-events"
-        SERVICE_NAME = "naga/exchange/services"
+        SLACK_CHANNEL = "#my-events"
+        SERVICE_NAME = "woohoo/my/services"
         ECR_REPO_URL = "${ECR_BASE_URL}/${SERVICE_NAME}"
         MSG_PREFIX = "*[${SERVICE_NAME}][${BRANCH_NAME}][${BUILD_NUMBER}]*"
         COMMIT = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
@@ -77,79 +77,25 @@ pipeline {
                 teamDomain: "${env.SLACK_TEAM_DOMAIN}",
                 tokenCredentialId: "${env.SLACK_CREDENTIALS}"
 
-            slackSend message: "${MSG_PREFIX}: Exchange services subbmitted for k8 deploy. | ${env.BUILD_URL}",
+            slackSend message: "${MSG_PREFIX}: my services subbmitted for k8 deploy. | ${env.BUILD_URL}",
                 color: "good",
                 channel: "${SLACK_CHANNEL}",
                 teamDomain: "${env.SLACK_TEAM_DOMAIN}",
                 tokenCredentialId: "${env.SLACK_CREDENTIALS}"
 
-            build job: 'Naga/Development/service_deploy_k8s_exchange',
+            build job: 'woohoo/Development/service_deploy_k8s_my',
             parameters: [string(name: 'IMAGE_URL', value: "${ECR_REPO_URL}"),
                          string(name: 'IMAGE_TAG', value: "${BRANCH_NAME}-${BUILD_NUMBER}"), 
-                         string(name: 'DEPLOYMENT', value: 'exchange-stream-worker'),
-                         string(name: 'CONTAINER', value: 'exchange-stream-worker')]
+                         string(name: 'DEPLOYMENT', value: 'my-svc-worker'),
+                         string(name: 'CONTAINER', value: 'my-svc-worker')]
 
-            build job: 'Naga/Development/service_deploy_k8s_exchange',
+            build job: 'woohoo/Development/service_deploy_k8s_my',
             parameters: [string(name: 'IMAGE_URL', value: "${ECR_REPO_URL}"),
                          string(name: 'IMAGE_TAG', value: "${BRANCH_NAME}-${BUILD_NUMBER}"), 
-                         string(name: 'DEPLOYMENT', value: 'exchange-stream-publisher'),
-                         string(name: 'CONTAINER', value: 'exchange-stream-publisher')]
-
-            build job: 'Naga/Development/service_deploy_k8s_exchange',
-            parameters: [string(name: 'IMAGE_URL', value: "${ECR_REPO_URL}"),
-                         string(name: 'IMAGE_TAG', value: "${BRANCH_NAME}-${BUILD_NUMBER}"), 
-                         string(name: 'DEPLOYMENT', value: 'exchange-stream-cache'),
-                         string(name: 'CONTAINER', value: 'exchange-stream-cache')]
-
-            build job: 'Naga/Development/service_deploy_k8s_exchange',
-            parameters: [string(name: 'IMAGE_URL', value: "${ECR_REPO_URL}"),
-                         string(name: 'IMAGE_TAG', value: "${BRANCH_NAME}-${BUILD_NUMBER}"), 
-                         string(name: 'DEPLOYMENT', value: 'exchange-orderbook-service'),
-                         string(name: 'CONTAINER', value: 'exchange-orderbook-service')]
-
-            build job: 'Naga/Development/service_deploy_k8s_exchange',
-            parameters: [string(name: 'IMAGE_URL', value: "${ECR_REPO_URL}"),
-                         string(name: 'IMAGE_TAG', value: "${BRANCH_NAME}-${BUILD_NUMBER}"), 
-                         string(name: 'DEPLOYMENT', value: 'exchange-usersync-service'),
-                         string(name: 'CONTAINER', value: 'exchange-usersync-service')]
-
-            build job: 'Naga/Development/service_deploy_k8s_exchange',
-            parameters: [string(name: 'IMAGE_URL', value: "${ECR_REPO_URL}"),
-                         string(name: 'IMAGE_TAG', value: "${BRANCH_NAME}-${BUILD_NUMBER}"), 
-                         string(name: 'DEPLOYMENT', value: 'exchange-socket-publisher-worker'),
-                         string(name: 'CONTAINER', value: 'exchange-socket-publisher-worker')]
-
-            build job: 'Naga/Development/service_deploy_k8s_exchange',
-            parameters: [string(name: 'IMAGE_URL', value: "${ECR_REPO_URL}"),
-                         string(name: 'IMAGE_TAG', value: "${BRANCH_NAME}-${BUILD_NUMBER}"), 
-                         string(name: 'DEPLOYMENT', value: 'exchange-event-logger-worker'),
-                         string(name: 'CONTAINER', value: 'exchange-event-logger-worker')]
-
-            build job: 'Naga/Development/service_deploy_k8s_exchange',
-            parameters: [string(name: 'IMAGE_URL', value: "${ECR_REPO_URL}"),
-                         string(name: 'IMAGE_TAG', value: "${BRANCH_NAME}-${BUILD_NUMBER}"), 
-                         string(name: 'DEPLOYMENT', value: 'exchange-market-streamer-worker'),
-                         string(name: 'CONTAINER', value: 'exchange-market-streamer-worker')]
-
-            build job: 'Naga/Development/service_deploy_k8s_exchange',
-            parameters: [string(name: 'IMAGE_URL', value: "${ECR_REPO_URL}"),
-                         string(name: 'IMAGE_TAG', value: "${BRANCH_NAME}-${BUILD_NUMBER}"), 
-                         string(name: 'DEPLOYMENT', value: 'exchange-error-handler-worker'),
-                         string(name: 'CONTAINER', value: 'exchange-error-handler-worker')]
+                         string(name: 'DEPLOYMENT', value: 'my-svc-publisher'),
+                         string(name: 'CONTAINER', value: 'my-svc-publisher')]
                          
-            build job: 'Naga/Development/service_deploy_k8s_exchange',
-            parameters: [string(name: 'IMAGE_URL', value: "${ECR_REPO_URL}"),
-                         string(name: 'IMAGE_TAG', value: "${BRANCH_NAME}-${BUILD_NUMBER}"), 
-                         string(name: 'DEPLOYMENT', value: 'main-api'),
-                         string(name: 'CONTAINER', value: 'main-api')]
-
-            build job: 'Naga/Development/service_deploy_k8s_exchange',
-            parameters: [string(name: 'IMAGE_URL', value: "${ECR_REPO_URL}"),
-                         string(name: 'IMAGE_TAG', value: "${BRANCH_NAME}-${BUILD_NUMBER}"), 
-                         string(name: 'DEPLOYMENT', value: 'auth-api'),
-                         string(name: 'CONTAINER', value: 'auth-api')]
-                         
-            build job: 'Naga/exchange_production/exchange_postman_api_tests/', 
+            build job: 'woohoo/my_production/my_postman_api_tests/', 
             parameters: [string(name: 'TAG', value: "${BRANCH_NAME}-${BUILD_NUMBER}")], wait: false
 
         }

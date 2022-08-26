@@ -20,7 +20,7 @@ rule_files:
 # Here it's Prometheus itself.
 scrape_configs:
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
-  - job_name: 'exchange_services'
+  - job_name: 'my_services'
     scrape_interval: 5s
     static_configs:
     - targets: ['localhost:9090']
@@ -33,4 +33,4 @@ scrape_configs:
     # :9108 -> elasticsearch (should be in another job with higher interval)
     - targets: ['localhost:8888', 'localhost:9419', 'localhost:9121', 'localhost:9108']
       labels:
-        group: 'm_exchange_services'
+        group: 'm_my_services'
