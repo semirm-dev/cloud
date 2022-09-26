@@ -1,9 +1,10 @@
 Region -> VPC -> AZ -> Subnet -> EC2
-Subnet IP range created from VPC CIDR
+Subnet IP range is created from VPC CIDR
+Same subnet can not be shared across AZs
 
 Route table:
 - determine where traffic from subnet will go (destination)
-- created on subnet
+- created on subnet, every subnet must have one (by default main route table from VPC is assigned)
 - a subnet can be in only one route table
 - one route table can be used in many subnets
 - local route table is for VPC destination
