@@ -21,11 +21,11 @@ Route table:
 - local route table is for VPC destination
 
 Internet Gateway: 
-- internet access for instances with public IP
+- internet access for instances with public IP (subnets, ec2)
 - one per VPC
 
 NAT Gateway: 
-- internet access for private subnets
+- internet access for instances with private IP (subnets, ec2)
 - connection between subnets
 - sits on public subnet
 - one way traffic, outbound only, from nat to igw, not from igw to nat
