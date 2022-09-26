@@ -62,6 +62,6 @@ Private Link:
 - connection goes to VPC Endpoint
 
 VPC Endpoint:
-- connect to AWS public services through private ip
-- Interface -> api gateway, cloudformation, cloudwatch...
-- Gateway -> only S3 and DynamoDB
+- privately connect AWS public services
+- Interface -> sits in subnet, ENI (elastic network interface) + SG api gateway, cloudformation, cloudwatch...
+- Gateway -> sits in VPC, uses route table, only S3 and DynamoDB
