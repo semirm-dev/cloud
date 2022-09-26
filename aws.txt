@@ -17,6 +17,12 @@ Route table:
 - one subnet can be in only one route table
 - local route table is for VPC destination
 
+NACL:
+- firewall on subnet
+- can be associated with multiple subnets
+- stateless
+- outbound/response not automatically enabled
+
 Internet Gateway: 
 - internet access for instances with public IP
 - one per VPC
@@ -26,12 +32,6 @@ NAT Gateway:
 - connection between subnets
 - sits on public subnet
 - allow private subnet to access public subnet which has access to internet
-
-NACL:
-- firewall on subnet
-- can be associated with multiple subnets
-- stateless
-- outbound/response not automatically enabled
 
 Security Group: 
 - firewall on Network Interface which is attached to EC2
