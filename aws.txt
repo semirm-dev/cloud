@@ -1,5 +1,6 @@
-Region -> VPC -> AZ -> Subnet -> EC2
-Subnet IP range is created from VPC CIDR
+Region -> VPC -> Subnet -> Route table -> Security Group -> EC2
+
+Subnet IP range is created from VPC CIDR host part
 Same subnet can not be shared across AZs
 
 Created on VPC:
