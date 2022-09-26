@@ -49,7 +49,7 @@ VPC peering:
 
 Transit Gateway: 
 - connection between VPCs
-- many VPC connect to one endpoint
+- many VPCs connect to one gateway/router
 - can be easier to manage
 - acts like router between VPCs
 
