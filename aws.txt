@@ -10,7 +10,7 @@ Route table:
 - local route table is for VPC destination
 
 Internet Gateway: internet access for VPC 
-NAT Gateway: internet access for EC2
+NAT Gateway: internet access for EC2, connectin between subnets
 
 NACL:
 - firewall on subnet
@@ -22,7 +22,7 @@ Security Group:
 - stateful
 - outbound/response automatically enabled but only from client/internet
 
-VPC peering: connection between VPCs, hard to manage, manually connect all VPCs
+VPC peering: connection between VPCs, hard to manage, manually connect all VPCs, CIDR can not overlap between VPCs
 Transit Gateway: connection between VPCs, easier to manage, acts like router between VPCs
 Direct Connect: connection between corp data center and VPC (to VGW)
 Private Link: connection between only selected AWS services in different VPCs (to VPC Endpoint)
