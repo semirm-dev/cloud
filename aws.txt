@@ -1,0 +1,27 @@
+Region -> VPC -> AZ -> Subnet -> EC2
+Subnet IP range created from VPC CIDR
+
+Route table:
+- determine where traffic from subnet will go (destination)
+- created on subnet
+- a subnet can be in only one route table
+- one route table can be used in many subnets
+- local route table is for VPC destination
+
+Internet Gateway: internet access for VPC 
+
+NAT Gateway:
+- firewall on subnet
+- internet access for EC2
+- stateless,
+- outbound/response not automatically enabled
+
+Security Group: 
+- firewall on EC2
+- stateful
+- outbound/response automatically enabled but only from client/internet
+
+VPC peering: connection between VPCs, hard to manage, manually connect all VPCs
+Transit Gateway: connection between VPCs, easier to manage, acts like router between VPCs
+Direct Connect: connection between corp data center and VPC (to VGW)
+Private Link: connection between only selected AWS services in different VPCs (to VPC Endpoint)
