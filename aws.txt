@@ -9,10 +9,10 @@ Route table:
 - local route table is for VPC destination
 
 Internet Gateway: internet access for VPC 
+NAT Gateway: internet access for EC2
 
-NAT Gateway:
+NACL:
 - firewall on subnet
-- internet access for EC2
 - stateless,
 - outbound/response not automatically enabled
 
