@@ -11,6 +11,7 @@ Created on VPC:
 
 Subnet:
 - associated with: route table and nacl
+- private subnet needs route table with nat gateway destination for internet access
 
 Route table:
 - determine where traffic from subnet will go (destination)
@@ -32,7 +33,8 @@ NAT Gateway:
 - internet access for instances without public IP
 - connection between subnets
 - sits on public subnet
-- allow private subnet to access public subnet which has access to internet
+- allow private subnet to access internet
+- one way traffic, outbound only, from nat to igw, not from igw to nat
 
 Security Group: 
 - firewall on Network Interface which is attached to EC2
