@@ -2,23 +2,39 @@ Region -> VPC -> AZ -> Subnet -> EC2
 Subnet IP range is created from VPC CIDR
 Same subnet can not be shared across AZs
 
+Created on VPC:
+- subnets
+- route tables
+- internet gateways
+- nat gateways
+
+Subnet:
+- associated with: route table and nacl
+
 Route table:
 - determine where traffic from subnet will go (destination)
-- created on subnet, every subnet must have one (by default main route table from VPC is assigned)
-- a subnet can be in only one route table
 - one route table can be used in many subnets
+- one subnet can be in only one route table
 - local route table is for VPC destination
 
-Internet Gateway: internet access for VPC, EC2
-NAT Gateway: connectin between subnets
+Internet Gateway: 
+- internet access for instances with public IP
+- one per VPC
+
+NAT Gateway: 
+- internet access for instances without public IP
+- connection between subnets
+- sits on public subnet
+- allow private subnet to access public subnet which has access to internet
 
 NACL:
 - firewall on subnet
-- stateless,
+- can be associated with multiple subnets
+- stateless
 - outbound/response not automatically enabled
 
 Security Group: 
-- firewall on EC2, precisely on Network Interface which is attached to EC2
+- firewall on Network Interface which is attached to EC2
 - multiple Network Interfaces can be attached to EC2
 - stateful
 - outbound/response automatically enabled but only from client/internet
