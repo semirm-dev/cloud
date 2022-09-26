@@ -60,3 +60,8 @@ Direct Connect:
 Private Link: 
 - connection between only selected AWS services in different VPCs
 - connection goes to VPC Endpoint
+
+VPC Endpoint:
+- connect to AWS public services through private ip
+- Interface -> api gateway, cloudformation, cloudwatch...
+- Gateway -> only S3 and DynamoDB
