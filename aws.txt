@@ -39,7 +39,23 @@ Security Group:
 - stateful
 - outbound/response automatically enabled but only from client/internet
 
-VPC peering: connection between VPCs, hard to manage, manually connect all VPCs, CIDR can not overlap between VPCs
-Transit Gateway: connection between VPCs, easier to manage, acts like router between VPCs
-Direct Connect: connection between corp data center and VPC (to VGW)
-Private Link: connection between only selected AWS services in different VPCs (to VPC Endpoint)
+VPC peering: 
+- connection between VPCs
+- one to one connection
+- can be harder to manage with many VPCs
+- manually connect all VPCs
+- VPC CIDR can not overlap between VPCs
+
+Transit Gateway: 
+- connection between VPCs
+- many VPC connect to one endpoint
+- can be easier to manage
+- acts like router between VPCs
+
+Direct Connect: 
+- connection between corp data center and VPC
+- connection goes to VGW on VPC
+
+Private Link: 
+- connection between only selected AWS services in different VPCs
+- connection goes to VPC Endpoint
