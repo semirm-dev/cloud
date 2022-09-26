@@ -11,10 +11,11 @@ Created on VPC:
 
 Subnet:
 - associated with: route table and nacl
-- private subnet needs route table with nat gateway destination for internet access
+- private subnet needs route table with nat gateway target for internet access
 
 Route table:
 - determine where traffic from subnet will go (destination)
+- destination + target, use target to reach destination
 - one route table can be used in many subnets
 - one subnet can be in only one route table
 - local route table is for VPC destination
@@ -30,10 +31,9 @@ Internet Gateway:
 - one per VPC
 
 NAT Gateway: 
-- internet access for instances without public IP
+- internet access for private subnets
 - connection between subnets
 - sits on public subnet
-- allow private subnet to access internet
 - one way traffic, outbound only, from nat to igw, not from igw to nat
 
 Security Group: 
