@@ -1,5 +1,6 @@
 Region -> VPC -> Subnet -> Route table -> Security Group -> EC2
 
+VPC CIDR can not overlap between VPCs
 Subnet IP range is created from VPC CIDR host part
 Same subnet can not be shared across AZs
 
@@ -28,7 +29,7 @@ NAT Gateway:
 - internet access for instances with private IP (subnets, ec2)
 - connection between subnets
 - sits on public subnet
-- one way traffic, outbound only, from nat to igw, not from igw to nat
+- one way traffic, outbound only (from nat to internet, not from internet to nat)
 
 Security Group: 
 - firewall on Network Interface which is attached to EC2
@@ -47,11 +48,10 @@ VPC peering:
 - one to one connection
 - can be harder to manage with many VPCs
 - manually connect all VPCs
-- VPC CIDR can not overlap between VPCs
 
 Transit Gateway: 
 - connection between VPCs
-- many VPCs connect to one gateway/router
+- many VPCs connect to one gateway/router/hub/bus
 - can be easier to manage
 - acts like router between VPCs
 
