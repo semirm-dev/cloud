@@ -134,6 +134,10 @@ cronJobs, periodically run pods
 -- ingress resource =
 --- define routing rules 
 
+---- network policy
+- sits on pod
+- allow/block incoming (ingress) or outgoing traffic (egress)
+
 
 ---------------------------------------------------
 
