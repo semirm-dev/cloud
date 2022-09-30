@@ -67,6 +67,9 @@ each namespace has default service account with limited access
 service account requires secret token (<1.22 token automatically created, >1.24 requires manual creation)
 each pod is by default assigned volume from default service account
 
+kubectl taint nodes node1 [params] to organize pods scheduling
+add toleration config to pod definition to match specific node taints
+
 ---------------------------------------------------
 
 
