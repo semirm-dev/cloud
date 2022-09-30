@@ -120,7 +120,7 @@ cronJobs, periodically run pods
 --- define routing rules 
 
 ---- network policy
-- sits on pod
+- sits/maps to pod
 - allow/block incoming (ingress) or outgoing traffic (egress)
 
 ---- rollout deployment
