@@ -117,7 +117,7 @@ kubectl config current-context <context_name>, set current context to use
 kubectl config set-context --current --namespace=<mynamespace>, modify current-context, set default namespace
 
 replicaSet, infinitely run pods
-jobs, run pod until completed state
+jobs, run pod until completed state, or completions cound matched
 cronJobs, periodically run pods
 
 ---------------------------------------------------
