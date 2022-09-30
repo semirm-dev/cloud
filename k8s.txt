@@ -126,10 +126,12 @@ cronJobs, periodically run pods
 -- means n services = 1 Ingress (load balancer + IP)
 -- multiple hosts (foo.example.com and bar.example.com) should/could point to same Ingress Controller IP - this is the difference from LoadBalancer
 -- configure ingress controller (nginx, haproxy) + define ingress resource (k8s manifest)
--- controller = 
----- k8s nginx-ingress-controller container deployment
----- service (nodeport), expose ingress controller to external world
----- service account, with some custom roles/permissions, requires to let nginx-controller do some intelligent logic
+-- ingress controller = 
+--- k8s nginx-ingress-controller container deployment
+--- service (nodeport), expose ingress controller to external world
+--- service account, with some custom roles/permissions, requires to let nginx-controller do some intelligent logic
+-- ingress resource =
+--- define routing rules 
 
 
 ---------------------------------------------------
