@@ -62,6 +62,7 @@ runtime (runc/kata/gvisor): low level, create and run containers
 
 
 two types of accounts: user (admin, developer) and service (k8s api, prometheus, jenkins)
+each namespace has default service account with limited access
 each pod is by default assigned volume from default service account
 
 ---------------------------------------------------
