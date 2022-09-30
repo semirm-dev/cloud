@@ -47,6 +47,7 @@ runtime (runc/kata/gvisor): low level, create and run containers
 - volumeMount is used in container definition to mount volume
 - mounting directories in volumeMount will completely override existing directory, use subPath in volumeMount
 - volume lifecycle is tied to pod (most of volume types), if pod dies then volumes die also
+
 - volume types:
 -- emptyDir{}, empty directory, tied to pod lifecycle
 -- gitRepo{}, emptyDir{} with github repository branch as initial content, tied to pod lifecycle
