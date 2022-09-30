@@ -61,12 +61,13 @@ runtime (runc/kata/gvisor): low level, create and run containers
 -- configMap{}, each entry of ConfigMap will create a file to container, all files are updated automatically (but not in processes)
 -- secret{}, stored on tmpfs (memory), encrypted, stored only on nodes that run pods that need access to
 
-
+- service account
 two types of accounts: user (admin, developer) and service (k8s api, prometheus, jenkins)
 each namespace has default service account with limited access
 service account requires secret token (<1.22 token automatically created, >1.24 requires manual creation)
 each pod is by default assigned volume from default service account
 
+- node taint
 kubectl taint nodes node1 [params] to organize pods scheduling
 taint tells node to accept specific pods, but it doesnt mean pod will be scheduled on tainted node! 
 add toleration config to pod definition to match specific node taints
