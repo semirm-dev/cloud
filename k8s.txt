@@ -125,6 +125,7 @@ cronJobs, periodically run pods
 - Ingress requires only one, host and path is used to forward traffic to different services
 -- means n services = 1 Ingress (load balancer + IP)
 -- multiple hosts (foo.example.com and bar.example.com) should/could point to same Ingress Controller IP - this is the difference from LoadBalancer
+-- configure ingress controller (nginx, haproxy) + define ingress resource (k8s manifest)
 
 
 ---------------------------------------------------
