@@ -74,7 +74,7 @@ each pod is by default assigned volume from default service account
 - node taint
 kubectl taint nodes node1 [params] to organize pods scheduling
 taint tells node to accept specific pods, but it doesnt mean pod will be scheduled on tainted node! 
-add toleration config to pod definition to match specific node taints
+add toleration config to pod definition to tell pod to tolerate specific node taint
 
 
 ---------------------------------------------------
