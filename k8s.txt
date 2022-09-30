@@ -120,6 +120,13 @@ replicaSet, infinitely run pods
 jobs, run pod until completed state, or completions cound matched
 cronJobs, periodically run pods
 
+- LoadBalancer service requires its own load balancer and publich IP
+-- means n services = n load balancers + public IPs
+- Ingress requires only one, host and path is used to forward traffic to different services
+-- means n services = 1 Ingress (load balancer + IP)
+-- multiple hosts (foo.example.com and bar.example.com) should/could point to same Ingress Controller IP - this is the difference from LoadBalancer
+
+
 ---------------------------------------------------
 
 ---- k8s operators
