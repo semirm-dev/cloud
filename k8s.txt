@@ -80,6 +80,11 @@ add toleration config to pod definition to tell pod to tolerate specific node ta
 -- taint/toleration, node side, protect node from pods 
 -- affinity, pod side, protect pod being placed on node
 
+- patterns
+-- sidecar, logs, send logs to log server
+-- adapter, middleware between sidecar container and destination (log server)
+-- ambassador, proxy container between pod and external destination (db, access external svc as localhost)
+
 
 ---------------------------------------------------
 
