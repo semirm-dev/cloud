@@ -124,6 +124,7 @@ cronJobs, periodically run pods
 - allow/block incoming (ingress) or outgoing traffic (egress)
 - both ingress and egress policy types must be configured to be forced/applied
 - not defined policy will be ignored (allowed)
+- policies grouped by list element
 
 ---- rollout deployment
 kubectl rollout restart deployment <deployment_name>, force deployment
