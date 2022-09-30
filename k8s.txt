@@ -52,6 +52,7 @@ runtime (runc/kata/gvisor): low level, create and run containers
 --- best option to store persistent data, it will survive node/pod crash
 -- PersistentVolume{}, nfs volume definitions, cluster level, not used in pods directly
 -- PersistentVolumeClaim{}, used in pod definitions to request PersistentVolume
+-- storageClass{} for dynamic persistenv volume provisioning, specific to storage provider
 -- configMap{}, each entry of ConfigMap will create a file to container, all files are updated automatically (but not in processes)
 -- secret{}, stored on tmpfs (memory), encrypted, stored only on nodes that run pods that need access to
 
