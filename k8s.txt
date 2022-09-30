@@ -15,14 +15,6 @@ docker push semirm/mysvc:2
 docker-compose up --force-recreate --build
 docker exec -it 97e37cc2d825 sh
 
--- minikube
-brew install hyperkit
-minikube start --vm=true --driver=hyperkit # required for MacOS
-minikube addons enable ingress
-
-kubectl get ingress # get address
-# add to /etc/hosts: 172.17.0.15 mysvc.com
-
 ----
 
 oci: open container initiative (define standards)
@@ -139,6 +131,14 @@ kubectl rollout resume deployment <deployment_name>
 $ kubectl get pods -o json | jq '.items[0].status.initContainerStatuses[] | {image: .image, imageId: .imageID}'
 $ kubectl get pods -o json | jq '[.items[].status.initContainerStatuses[]? | {image: .image, imageId: .imageID}]'
 $ kubectl get pods -o json | jq '[.items[].status.initContainerStatuses[]? | select(.image == "mydocker/image") | {image: .image, imageId: .imageID}]'
+
+-- minikube
+brew install hyperkit
+minikube start --vm=true --driver=hyperkit # required for MacOS
+minikube addons enable ingress
+
+kubectl get ingress # get address
+# add to /etc/hosts: 172.17.0.15 mysvc.com
 
 ---------------------------------------------------
 
