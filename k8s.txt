@@ -61,7 +61,7 @@ runtime (runc/kata/gvisor): low level, create and run containers
 -- secret{}, stored on tmpfs (memory), encrypted, stored only on nodes that run pods that need access to
 
 
-two types of accounts: user (admin, developer) and service (prometheus, jenkins)
+two types of accounts: user (admin, developer) and service (k8s api, prometheus, jenkins)
 
 ---------------------------------------------------
 
