@@ -35,7 +35,9 @@ deamon/engine (containerd-cri/cri-o/dockerd): pull images, networking, storage, 
 |
 runtime (runc/kata/gvisor): low level, create and run containers
 
+
 ---------------------------------------------------
+
 
 ------ pods
 - group multiple containers together as a single unit
@@ -47,7 +49,8 @@ runtime (runc/kata/gvisor): low level, create and run containers
 - volumeMount is used in container definition to mount volume
 - mounting directories in volumeMount will completely override existing directory, use subPath in volumeMount
 - volume lifecycle is tied to pod (most of volume types), if pod dies then volumes die also
-- nodeSelector on pod must match label from node for scheduling
+- nodeSelector for simple pod:node matching
+- affinity:matchExpressions for complex pod:node matching
 
 - volume types:
 -- emptyDir{}, empty directory, tied to pod lifecycle
@@ -72,6 +75,7 @@ each pod is by default assigned volume from default service account
 kubectl taint nodes node1 [params] to organize pods scheduling
 taint tells node to accept specific pods, but it doesnt mean pod will be scheduled on tainted node! 
 add toleration config to pod definition to match specific node taints
+
 
 ---------------------------------------------------
 
