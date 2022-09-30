@@ -85,6 +85,13 @@ add toleration config to pod definition to tell pod to tolerate specific node ta
 -- adapter, middleware between sidecar container and destination (log server)
 -- ambassador, proxy container between pod and external destination (db, access external svc as localhost)
 
+use initContainer for requirements setup (db create...)
+k describe pod -> conditions to check pod scheduling conditions
+
+- pod ready state control, when the application is ready to be used
+- readiness probe, healthchecks, delays, interval to run, initially on pod start
+- liveness probe, after container crashes/restarts, continues healthchecks after pod is deployed
+
 
 ---------------------------------------------------
 
