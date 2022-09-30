@@ -132,6 +132,9 @@ $ kubectl apply -f <config/crd/*.yaml> -> apply crd on k8s, verify with kubectl 
 - helm rollback <rel_name> <rev_num>, revert release to specified revision
 
 
+---------------------------------------------------
+
+
 ---- filter resources
 $ kubectl get pods -o json | jq '.items[0].status.initContainerStatuses[] | {image: .image, imageId: .imageID}'
 $ kubectl get pods -o json | jq '[.items[].status.initContainerStatuses[]? | {image: .image, imageId: .imageID}]'
