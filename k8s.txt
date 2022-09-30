@@ -35,9 +35,7 @@ deamon/engine (containerd-cri/cri-o/dockerd): pull images, networking, storage, 
 |
 runtime (runc/kata/gvisor): low level, create and run containers
 
-
 ---------------------------------------------------
-
 
 ------ pods
 - group multiple containers together as a single unit
@@ -85,16 +83,14 @@ add toleration config to pod definition to tell pod to tolerate specific node ta
 -- adapter, middleware between sidecar container and destination (log server)
 -- ambassador, proxy container between pod and external destination (db, access external svc as localhost)
 
-use initContainer for requirements setup (db create...)
-k describe pod -> conditions to check pod scheduling conditions
-
 - pod ready state control, when the application is ready to be used
 - readiness probe, healthchecks, delays, interval to run, initially on pod start
 - liveness probe, continues healthchecks after pod is deployed, after container crashes/restarts
 
-
 ---------------------------------------------------
 
+use initContainer for requirements setup (db create...)
+k describe pod -> conditions to check pod scheduling conditions
 
 ---- filter resources
 $ kubectl get pods -o json | jq '.items[0].status.initContainerStatuses[] | {image: .image, imageId: .imageID}'
@@ -120,9 +116,11 @@ kubectl config view, display config info, available clusters and contexts
 kubectl config current-context <context_name>, set current context to use
 kubectl config set-context --current --namespace=<mynamespace>, modify current-context, set default namespace
 
+replicaSet, infinitely run pods
+jobs, run pod until completed state
+cronJobs, periodically run pods
 
 ---------------------------------------------------
-
 
 ---- k8s operators
 control loop
