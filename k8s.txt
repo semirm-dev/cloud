@@ -115,6 +115,7 @@ cronJobs, periodically run pods
 --- headless service
 - creates dns for each pod, podname+headless-svc-name+host
 - does not provide loadbalancing
+- clusterIP: None
 
 ---- network policy
 - sits/maps to pod
