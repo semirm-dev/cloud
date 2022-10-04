@@ -112,6 +112,10 @@ cronJobs, periodically run pods
 -- ingress resource =
 --- define routing rules 
 
+--- headless service
+- creates dns for each pod, podname+headless-svc-name+host
+- does not provide loadbalancing
+
 ---- network policy
 - sits/maps to pod
 - allow/block incoming (ingress) or outgoing traffic (egress)
