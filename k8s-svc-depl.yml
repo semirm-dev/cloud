@@ -105,3 +105,11 @@ stringData:
     -----BEGIN CERTIFICATE-----
     
     -----END CERTIFICATE-----
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/eksctl-irptest-addon-iamsa-default-my-serviceaccount-Role1-UCGG6NDYZ3UE
+  name: my-serviceaccount
+  namespace: default
