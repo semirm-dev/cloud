@@ -138,6 +138,37 @@ $ kubectl get pods -o json | jq '.items[0].status.initContainerStatuses[] | {ima
 $ kubectl get pods -o json | jq '[.items[].status.initContainerStatuses[]? | {image: .image, imageId: .imageID}]'
 $ kubectl get pods -o json | jq '[.items[].status.initContainerStatuses[]? | select(.image == "mydocker/image") | {image: .image, imageId: .imageID}]'
 
+
+-- cluster
+
+control plane: 
+- kube-apiserver, expose k8s api, communicates to control plane
+- etcd, store for cluster data
+- kube-scheduler, pods watcher
+- controller-manager, controllers for nodes, jobs, servicaccounts...
+- dns server
+
+node:
+- kubelet, pod management, talks to apiserver
+- kube-proxy, network proxy, network rules, network communication
+- container-runtime, runc
+
+-- setup, for each of the nodes:
+requirements: linux, 2gb ram, 2cpus, network connectivity between nodes, open ports, swap
+cgroup - constrain resources for processes
+- cgroupfs, not recommended
+- systemd, default and recommended
+
+install: kubeadm, kubelet, kubectl
+install container runtime (containerd, cri-o, docker-engine...)
+- containerd	unix:///var/run/containerd/containerd.sock
+- CRI-O	unix:///var/run/crio/crio.sock
+- Docker Engine (using cri-dockerd)	unix:///var/run/cri-dockerd.sock
+enable systemd for both container runtime and kubelet
+
+
+----
+
 -- minikube
 brew install hyperkit
 minikube start --vm=true --driver=hyperkit # required for MacOS
