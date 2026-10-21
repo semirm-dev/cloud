@@ -2,6 +2,8 @@
 
 This is the direct path from DevSecOps to DFIR (Digital Forensics & Incident Response), specializing in cloud, and it's self-contained. It favors operations and investigation over software development.
 
+**Per-week checklist:** `blue_checklist.md` lists what to learn, the tools, where to practice and how to test yourself for every week below.
+
 **If you follow `platform_first.md` first:** its Stages 1–2 cover Phase 1 here (Weeks 1–12), including CKA and CKS. Start at Phase 2.
 
 ---
