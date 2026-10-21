@@ -1,12 +1,12 @@
 # Roadmap: Senior Platform Engineer, Security-Focused
 
-This roadmap gets you the official title first, then turns it toward security. It's self-contained. The follow-on is `blue.md` (DevSecOps → detection engineering → blue team).
+This roadmap gets you the official title first, then turns it toward security. It's self-contained. The follow-on is `blue.md` (DevSecOps → DFIR, cloud specialization).
 
 | Stage | What it is | Duration | Title at the end |
 |---|---|---|---|
 | 1 | Study alongside your current job (4 h/day, 6 days/week) | 12 weeks | **Senior Platform Engineer** |
 | 2 | Full-time platform job, security as your chosen focus | 12–18 months | **Platform Security / DevSecOps Engineer** |
-| 3 | Detection engineering (optional next step) | see `blue.md` Phase 2 | **Detection / Security Platform Engineer** |
+| 3 | Detection, investigation & DFIR (next step) | see `blue.md` Phases 2–3 | **Incident Responder / Cloud IR Engineer** |
 
 ---
 
@@ -125,9 +125,9 @@ Once you've owned **3 or more checklist items in production**, either ask for th
 
 ---
 
-## Stage 3: Detection Engineering (optional)
+## Stage 3: Detection, Investigation & DFIR
 
-Continue with **`blue.md` from Phase 2** (security telemetry, detections as code, adversary emulation, automated response). Stages 1–2 already cover nearly all of `blue.md` Phase 1.
+Continue with **`blue.md` from Phase 2** (security telemetry, queries, adversary emulation, IR playbooks), then Phase 3 (DFIR, cloud specialization). Stages 1–2 already cover nearly all of `blue.md` Phase 1.
 
 ---
 
