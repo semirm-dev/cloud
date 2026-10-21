@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 630" width="1000" height="630" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <style>
+    .t { font-size: 15px; font-weight: 600; fill: #0f172a; text-anchor: middle }
+    .s { font-size: 12px; fill: #475569; text-anchor: middle }
+    .l { font-size: 11px; fill: #334155; font-style: italic }
+    .a { stroke: #334155; stroke-width: 1.5; fill: none; marker-end: url(#arr) }
+    .n { fill: #f1f5f9; stroke: #64748b }
+    .ci { fill: #fff7ed; stroke: #ea580c }
+    .iac { fill: #f5f3ff; stroke: #7c3aed }
+    .cl { fill: #eff6ff; stroke: #2563eb; stroke-width: 1.5 }
+    .c { fill: #ffffff; stroke: #93c5fd }
+    .aws { fill: #fffbeb; stroke: #d97706 }
+  </style>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="630" fill="#ffffff"/>
+
+  <rect class="n" x="40" y="40" width="110" height="50" rx="8"/>
+  <text class="t" x="95" y="70">You</text>
+
+  <rect class="n" x="230" y="40" width="220" height="50" rx="8"/>
+  <text class="t" x="340" y="62">Git repo</text>
+  <text class="s" x="340" y="80">platform-lab/</text>
+
+  <rect class="ci" x="40" y="160" width="200" height="110" rx="8"/>
+  <text class="t" x="140" y="185">CI · GitHub Actions</text>
+  <text class="s" x="140" y="207">lint · test · kubeconform</text>
+  <text class="s" x="140" y="227">Trivy · Checkov scans</text>
+  <text class="s" x="140" y="247">build + sign (Cosign)</text>
+
+  <rect class="iac" x="300" y="160" width="200" height="110" rx="8"/>
+  <text class="t" x="400" y="185">Terraform (IaC)</text>
+  <text class="s" x="400" y="207">local → kind</text>
+  <text class="s" x="400" y="227">prod → EKS + VPC + IAM</text>
+  <text class="s" x="400" y="247">tested with Terratest</text>
+
+  <rect class="n" x="40" y="330" width="200" height="70" rx="8"/>
+  <text class="t" x="140" y="357">Registry</text>
+  <text class="s" x="140" y="378">localhost:5001 / ECR</text>
+
+  <rect class="aws" x="40" y="470" width="200" height="70" rx="8"/>
+  <text class="t" x="140" y="497">AWS services</text>
+  <text class="s" x="140" y="518">RDS · S3 · IAM</text>
+
+  <rect class="cl" x="300" y="320" width="660" height="280" rx="12"/>
+  <text class="t" x="315" y="345" style="text-anchor:start">Cluster: same stack on kind (local) and EKS (prod)</text>
+
+  <rect class="c" x="315" y="362" width="200" height="62" rx="6"/>
+  <text class="t" x="415" y="388">Cilium</text>
+  <text class="s" x="415" y="408">CNI + NetworkPolicy</text>
+  <rect class="c" x="525" y="362" width="200" height="62" rx="6"/>
+  <text class="t" x="625" y="388">Gateway API</text>
+  <text class="s" x="625" y="408">Ingress + cert-manager TLS</text>
+  <rect class="c" x="735" y="362" width="200" height="62" rx="6"/>
+  <text class="t" x="835" y="388">Argo CD</text>
+  <text class="s" x="835" y="408">GitOps sync from Git</text>
+
+  <rect class="c" x="315" y="436" width="200" height="62" rx="6"/>
+  <text class="t" x="415" y="462">Kyverno</text>
+  <text class="s" x="415" y="482">admission policies</text>
+  <rect class="c" x="525" y="436" width="200" height="62" rx="6"/>
+  <text class="t" x="625" y="462">External Secrets</text>
+  <text class="s" x="625" y="482">Vault → pods</text>
+  <rect class="c" x="735" y="436" width="200" height="62" rx="6"/>
+  <text class="t" x="835" y="462">Keycloak</text>
+  <text class="s" x="835" y="482">SSO · OIDC</text>
+
+  <rect class="c" x="315" y="510" width="200" height="62" rx="6"/>
+  <text class="t" x="415" y="536">Crossplane</text>
+  <text class="s" x="415" y="556">self-service infra (XRDs)</text>
+  <rect class="c" x="525" y="510" width="200" height="62" rx="6"/>
+  <text class="t" x="625" y="536">Observability</text>
+  <text class="s" x="625" y="556">Prometheus · Grafana · Loki</text>
+  <rect class="c" x="735" y="510" width="200" height="62" rx="6"/>
+  <text class="t" x="835" y="536">Workloads</text>
+  <text class="s" x="835" y="556">your apps</text>
+
+  <path class="a" d="M150,65 H228"/>
+  <text class="l" x="189" y="57" text-anchor="middle">git push</text>
+  <path class="a" d="M300,90 V125 H140 V158"/>
+  <path class="a" d="M400,90 V158"/>
+  <path class="a" d="M450,65 H835 V360"/>
+  <text class="l" x="640" y="57" text-anchor="middle">watched by Argo CD</text>
+  <path class="a" d="M400,270 V318"/>
+  <text class="l" x="408" y="299">creates cluster</text>
+  <path class="a" d="M140,270 V328"/>
+  <text class="l" x="148" y="303">push image</text>
+  <path class="a" d="M240,365 H298"/>
+  <text class="l" x="269" y="357" text-anchor="middle">pull</text>
+  <path class="a" d="M315,541 H280 V505 H242"/>
+  <text class="l" x="262" y="562" text-anchor="middle">provisions</text>
+</svg>

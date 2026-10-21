@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" width="900" height="460" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <style>
+    .t { font-size: 15px; font-weight: 600; fill: #0f172a; text-anchor: middle }
+    .s { font-size: 12px; fill: #475569; text-anchor: middle }
+    .l { font-size: 11px; fill: #334155; font-style: italic }
+    .a { stroke: #334155; stroke-width: 1.5; fill: none; marker-end: url(#arr) }
+  </style>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <rect width="900" height="460" fill="#ffffff"/>
+
+  <rect x="20" y="20" width="860" height="420" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+  <text class="t" x="38" y="46" style="text-anchor:start">Windows host</text>
+
+  <rect x="50" y="70" width="300" height="170" rx="8" fill="#f0fdf4" stroke="#16a34a"/>
+  <text class="t" x="200" y="98">WSL2 (Ubuntu)</text>
+  <text class="s" x="200" y="125">kubectl · helm · kind</text>
+  <text class="s" x="200" y="147">terraform · k9s · stern</text>
+  <text class="s" x="200" y="169">kubectx · cilium CLI</text>
+  <text class="s" x="200" y="191">~/platform-lab (git repo)</text>
+
+  <rect x="470" y="70" width="380" height="270" rx="8" fill="#eff6ff" stroke="#2563eb"/>
+  <text class="t" x="660" y="98">Docker Desktop</text>
+  <rect x="490" y="112" width="340" height="148" rx="6" fill="#ffffff" stroke="#93c5fd"/>
+  <text class="t" x="660" y="136">kind cluster "lab"</text>
+  <rect x="505" y="150" width="100" height="44" rx="5" fill="#dbeafe" stroke="#3b82f6"/>
+  <text class="s" x="555" y="177">control-plane</text>
+  <rect x="615" y="150" width="100" height="44" rx="5" fill="#dbeafe" stroke="#3b82f6"/>
+  <text class="s" x="665" y="177">worker</text>
+  <rect x="725" y="150" width="100" height="44" rx="5" fill="#dbeafe" stroke="#3b82f6"/>
+  <text class="s" x="775" y="177">worker</text>
+  <text class="s" x="660" y="224">Cilium CNI · :80/:443 mapped to host</text>
+  <text class="s" x="660" y="244">each node = one container</text>
+  <rect x="490" y="280" width="340" height="44" rx="6" fill="#ffffff" stroke="#93c5fd"/>
+  <text class="t" x="660" y="307">local registry · localhost:5001</text>
+
+  <rect x="50" y="300" width="300" height="110" rx="8" fill="#fdf4ff" stroke="#a21caf"/>
+  <text class="t" x="200" y="328">Multipass / Hyper-V VMs</text>
+  <text class="s" x="200" y="352">kubeadm: 1 control-plane + 2 workers</text>
+  <text class="s" x="200" y="374">CKA: install, upgrade, etcd backup</text>
+  <text class="s" x="200" y="394">real nodes, systemd, kubelet</text>
+
+  <rect x="560" y="378" width="200" height="44" rx="8" fill="#f1f5f9" stroke="#64748b"/>
+  <text class="t" x="660" y="405">Browser</text>
+
+  <path class="a" d="M350,150 H488"/>
+  <text class="l" x="419" y="140" text-anchor="middle">kubectl / helm</text>
+  <text class="l" x="419" y="168" text-anchor="middle">docker API</text>
+  <path class="a" d="M200,240 V298"/>
+  <text class="l" x="208" y="273">ssh / kubeadm</text>
+  <path class="a" d="M660,280 V262"/>
+  <text class="l" x="668" y="275">pull</text>
+  <path class="a" d="M660,378 V342"/>
+  <text class="l" x="668" y="364">http://localhost</text>
+</svg>

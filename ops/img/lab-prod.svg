@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" width="1000" height="640" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <style>
+    .t { font-size: 15px; font-weight: 600; fill: #0f172a; text-anchor: middle }
+    .m { font-size: 13px; font-weight: 500; fill: #0f172a; text-anchor: middle }
+    .s { font-size: 12px; fill: #475569; text-anchor: middle }
+    .l { font-size: 11px; fill: #334155; font-style: italic }
+    .a { stroke: #334155; stroke-width: 1.5; fill: none; marker-end: url(#arr) }
+    .d { stroke-dasharray: 5 4 }
+    .n { fill: #f1f5f9; stroke: #64748b }
+    .w { fill: #ffffff; stroke: #93c5fd }
+    .sv { fill: #ffffff; stroke: #f59e0b }
+  </style>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="640" fill="#ffffff"/>
+
+  <rect class="n" x="40" y="20" width="120" height="44" rx="8"/>
+  <text class="t" x="100" y="47">Users</text>
+  <rect x="200" y="20" width="170" height="44" rx="8" fill="#fdf4ff" stroke="#a21caf"/>
+  <text class="t" x="285" y="47">Keycloak / IdP</text>
+  <rect class="n" x="410" y="20" width="120" height="44" rx="8"/>
+  <text class="t" x="470" y="47">Git</text>
+  <rect x="720" y="20" width="240" height="44" rx="8" fill="#f5f3ff" stroke="#7c3aed"/>
+  <text class="t" x="840" y="47">Terraform + CI</text>
+
+  <rect x="20" y="100" width="960" height="520" rx="12" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+  <text class="t" x="36" y="122" style="text-anchor:start">AWS account · prod</text>
+
+  <rect class="sv" x="40" y="138" width="180" height="44" rx="6"/>
+  <text class="m" x="130" y="157">Route 53</text>
+  <text class="s" x="130" y="174">external-dns</text>
+
+  <rect x="40" y="200" width="700" height="405" rx="10" fill="#f0f9ff" stroke="#0284c7" stroke-dasharray="6 4"/>
+  <text class="t" x="695" y="221" style="text-anchor:end">VPC · 3 availability zones</text>
+
+  <rect x="60" y="232" width="200" height="48" rx="6" fill="#ffffff" stroke="#0284c7"/>
+  <text class="m" x="160" y="252">ALB / NLB</text>
+  <text class="s" x="160" y="270">AWS LB Controller</text>
+  <rect x="520" y="232" width="170" height="48" rx="6" fill="#ffffff" stroke="#0284c7"/>
+  <text class="m" x="605" y="252">RDS</text>
+  <text class="s" x="605" y="270">via Crossplane claim</text>
+
+  <rect x="60" y="300" width="660" height="200" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text class="t" x="180" y="321" style="text-anchor:start">EKS · managed control plane</text>
+
+  <rect class="w" x="80" y="335" width="180" height="48" rx="6"/>
+  <text class="m" x="170" y="355">Gateway / Ingress</text>
+  <text class="s" x="170" y="373">TLS · cert-manager</text>
+  <rect class="w" x="80" y="420" width="180" height="60" rx="6"/>
+  <text class="m" x="170" y="444">Services → Pods</text>
+  <text class="s" x="170" y="464">HPA · PDBs · spread</text>
+
+  <rect class="w" x="290" y="335" width="200" height="36" rx="6"/>
+  <text class="m" x="390" y="358">Argo CD (GitOps)</text>
+  <rect class="w" x="290" y="380" width="200" height="36" rx="6"/>
+  <text class="m" x="390" y="403">Kyverno (policy)</text>
+  <rect class="w" x="290" y="425" width="200" height="36" rx="6"/>
+  <text class="m" x="390" y="448">Prometheus · Grafana · Loki</text>
+  <rect class="w" x="500" y="335" width="200" height="36" rx="6"/>
+  <text class="m" x="600" y="358">External Secrets</text>
+  <rect class="w" x="500" y="380" width="200" height="36" rx="6"/>
+  <text class="m" x="600" y="403">Velero (backup)</text>
+  <rect class="w" x="500" y="425" width="200" height="36" rx="6"/>
+  <text class="m" x="600" y="448">Karpenter (autoscaling)</text>
+
+  <rect x="60" y="515" width="660" height="40" rx="6" fill="#dbeafe" stroke="#3b82f6"/>
+  <text class="s" x="390" y="540">Worker nodes (EC2) · AZ-a · AZ-b · AZ-c</text>
+  <text class="s" x="390" y="585">Pod Security Standards · default-deny NetworkPolicies · no standing cluster-admin</text>
+
+  <rect class="sv" x="760" y="200" width="200" height="50" rx="6"/>
+  <text class="m" x="860" y="221">ECR</text>
+  <text class="s" x="860" y="239">container images</text>
+  <rect class="sv" x="760" y="270" width="200" height="50" rx="6"/>
+  <text class="m" x="860" y="291">Secrets Manager</text>
+  <text class="s" x="860" y="309">or Vault</text>
+  <rect class="sv" x="760" y="340" width="200" height="50" rx="6"/>
+  <text class="m" x="860" y="361">IAM</text>
+  <text class="s" x="860" y="379">IRSA · Pod Identity</text>
+  <rect class="sv" x="760" y="410" width="200" height="50" rx="6"/>
+  <text class="m" x="860" y="431">S3</text>
+  <text class="s" x="860" y="449">backups · Terraform state</text>
+  <rect class="sv" x="760" y="480" width="200" height="50" rx="6"/>
+  <text class="m" x="860" y="501">CloudWatch</text>
+  <text class="s" x="860" y="519">audit + control-plane logs</text>
+
+  <path class="a" d="M100,64 V136"/>
+  <path class="a" d="M130,182 V230"/>
+  <path class="a" d="M160,280 V333"/>
+  <path class="a" d="M170,383 V418"/>
+  <path class="a" d="M470,64 V333"/>
+  <text class="l" x="478" y="160">Argo CD syncs</text>
+  <path class="a" d="M840,64 V98"/>
+  <text class="l" x="832" y="86" text-anchor="end">provisions VPC · EKS · IAM</text>
+  <path class="a d" d="M285,64 V298"/>
+  <text class="l" x="293" y="160">OIDC</text>
+  <path class="a d" d="M760,225 H710 V298"/>
+  <text class="l" x="735" y="218" text-anchor="middle">pull</text>
+  <path class="a" d="M700,353 H735 V295 H758"/>
+  <path class="a" d="M700,398 H748 V435 H758"/>
+  <path class="a" d="M600,461 V513"/>
+</svg>
