@@ -14,7 +14,7 @@ This is the direct path from DevSecOps to DFIR (Digital Forensics & Incident Res
 
 **Target roles, in order:**
 1. **Senior DevSecOps / Cloud Security Engineer**: what you get hired into first (end of Phase 1).
-2. **DFIR, cloud specialization**: the destination. Titles: Incident Responder, DFIR Analyst/Consultant, Cloud Incident Response Engineer, CSIRT member. Employers: IR consultancies (Mandiant, CrowdStrike Services, Unit 42, Kroll), cloud vendors (AWS CIRT, Wiz), internal CSIRTs.
+2. **DFIR (Digital Forensics & Incident Response), cloud specialization**: the destination. Incident Response = contain and stop the attack; Digital Forensics = collect and analyze evidence to work out what happened, how and why. Titles: Incident Responder, DFIR Analyst/Consultant, Cloud Incident Response Engineer, CSIRT member. Employers: IR consultancies (Mandiant, CrowdStrike Services, Unit 42, Kroll), cloud vendors (AWS CIRT, Wiz), internal CSIRTs.
 3. Detection engineering is a **skill set** you learn on the way (logs, queries, attacker techniques), not a target role. It's too coding-heavy for what you want. Skip tier-1 SOC roles too: they would reset your seniority.
 
 **Commitment:** 4 h/day, 6 days/week (~24 h/week), **36 weeks (~9 months)**. Each phase ends with a buffer week. If you fall behind, use it to catch up. Don't compress the next phase.
