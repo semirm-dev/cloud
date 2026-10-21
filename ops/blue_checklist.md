@@ -6,6 +6,8 @@ Companion to `blue.md`. For each week: what to **learn**, the **tools**, where t
 
 ## Phase 1: DevSecOps Foundations (Weeks 1 – 12)
 
+With your experience, skip beginner video courses (KodeKloud lectures, generic AWS Skill Builder courses). Spend the time on hands-on labs, workshops and exam simulators.
+
 ### Weeks 1–2: Terraform & IaC Security
 
 **Learn**
@@ -91,6 +93,7 @@ Companion to `blue.md`. For each week: what to **learn**, the **tools**, where t
 - [ ] Sealed Secrets vs ESO + Vault: no central audit, re-sealing on rotation, controller key as single point of compromise
 - [ ] Argo CD AppProjects: restricting source repos, destinations and cluster-scoped resources
 - [ ] Argo CD RBAC via Keycloak SSO groups, and disabling the local `admin` account
+- [ ] EKS workload identity: EKS Pod Identity (recommended for new setups) vs IRSA (older, still common in existing clusters you'll investigate), and how each maps a service account to an IAM role
 
 **Tools**
 - **HashiCorp Vault**: Kubernetes auth, dynamic DB credentials, leases, audit device
@@ -104,6 +107,7 @@ Companion to `blue.md`. For each week: what to **learn**, the **tools**, where t
 - [Vault Kubernetes auth docs](https://developer.hashicorp.com/vault/docs/auth/kubernetes): configure the auth method and bind a role to one namespace and service account
 - [ESO HashiCorp Vault provider](https://external-secrets.io/latest/provider/hashicorp-vault/): connect ESO to Vault with Kubernetes auth
 - [Argo CD projects](https://argo-cd.readthedocs.io/en/stable/user-guide/projects/) and [RBAC](https://argo-cd.readthedocs.io/en/stable/operator-manual/rbac/): build a restricted AppProject and map Keycloak groups to roles
+- [EKS Pod Identity docs](https://docs.aws.amazon.com/eks/latest/userguide/pod-identities.html): give a pod S3 access with Pod Identity on the throwaway EKS cluster, then do the same with IRSA and compare
 - Own lab ([lab.md](lab.md)): install Vault, ESO and Argo CD on the kind `lab` cluster with Helm, deploy Postgres plus an app using dynamic creds, and plant a fake key to confirm Gitleaks blocks the commit
 
 **Test yourself**
@@ -112,6 +116,7 @@ Companion to `blue.md`. For each week: what to **learn**, the **tools**, where t
 - [ ] Revoke a Vault lease and show the app's Postgres user stops working
 - [ ] Find a planted secret in old Git history with TruffleHog or Gitleaks in under 5 minutes
 - [ ] Explain why a default Argo CD install is effectively cluster-admin, and which AppProject fields close that gap
+- [ ] Explain the difference between EKS Pod Identity and IRSA, and where each one shows up in CloudTrail when you trace a pod's AWS calls
 
 ### Week 5: Software Supply Chain
 
@@ -172,6 +177,7 @@ Companion to `blue.md`. For each week: what to **learn**, the **tools**, where t
 **Practice**
 - [killer.sh](https://killer.sh/): use both CKA simulator sessions that come with the exam, the first early in Week 7 and the second a few days before the exam
 - [Killercoda CKA scenarios](https://killercoda.com/killer-shell-cka): free browser-based tasks; do them daily for speed
+- [KodeKloud](https://kodekloud.com/) (optional, paid): only if your first killer.sh score shows gaps. Use the CKA mock exams and labs, skip the lectures, and subscribe for one month
 - [Kubernetes the Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way): build a cluster without kubeadm once to understand what kubeadm automates
 - [etcd backup and restore docs](https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/): practice snapshot and restore until you can do it from memory
 - [CNCF curriculum](https://github.com/cncf/curriculum): check the current CKA PDF and tick off each domain
@@ -182,7 +188,7 @@ Companion to `blue.md`. For each week: what to **learn**, the **tools**, where t
 - [ ] Upgrade a kubeadm control plane and one worker by one minor version without docs, except the official upgrade page
 - [ ] Fix a node in `NotReady` caused by a stopped or misconfigured kubelet in under 5 minutes
 - [ ] Explain how a pod resolves `svc.namespace.svc.cluster.local`, step by step
-- [ ] Score at least 80% on a killer.sh CKA session before booking the exam
+- [ ] Score at least 80% on a killer.sh CKA session before booking the exam (killer.sh is harder than the real exam; the real pass mark is about 66%)
 
 ### Weeks 9–10: Cluster Hardening & Admission Control (CKS domains)
 
@@ -210,6 +216,7 @@ Companion to `blue.md`. For each week: what to **learn**, the **tools**, where t
 - [Kubernetes Goat](https://madhuakula.com/kubernetes-goat/): deploy the vulnerable cluster and work through the scenarios, then write a Kyverno policy that would have prevented each one
 - [Bad Pods](https://github.com/BishopFox/badPods): run each pod manifest, escape to the node, then confirm your Kyverno/PSA setup rejects it
 - [Killercoda CKS scenarios](https://killercoda.com/killer-shell-cks): free hands-on tasks for each CKS domain
+- [EKS Best Practices Guide](https://docs.aws.amazon.com/eks/latest/best-practices/introduction.html) (reference, not a lab): read the security section and compare it with your hardened cluster
 - [Wiz K8s LAN Party](https://k8slanparty.com/): CTF on Kubernetes network misconfigurations
 - [Kyverno policy library](https://kyverno.io/policies/) and [verifyImages docs](https://kyverno.io/docs/policy-types/cluster-policy/verify-images/): start from library policies and add Cosign verification for your Week 5 image
 - Own lab ([lab.md](lab.md)): harden the kind `lab` cluster (Cilium enforces NetworkPolicy), apply default-deny, run `kube-bench` on a kubeadm VM, and document the remaining findings
@@ -276,7 +283,7 @@ Companion to `blue.md`. For each week: what to **learn**, the **tools**, where t
 - Own lab ([lab.md](lab.md)): rebuild the kind `lab` cluster from Git with the full Phase 1 stack in one command, and use it for the capstone diagram and write-up
 
 **Test yourself**
-- [ ] Score at least 80% on a killer.sh CKS session before the exam
+- [ ] Score at least 80% on a killer.sh CKS session before the exam (the real pass mark is about 67%)
 - [ ] Present the capstone diagram out loud in 5 minutes, naming the threat each control stops
 - [ ] Destroy and rebuild the whole lab from Git without manual steps
 - [ ] Answer "tell me about a security problem you solved" with a story from your CV in under 2 minutes
