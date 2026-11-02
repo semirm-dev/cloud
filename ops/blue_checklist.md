@@ -146,7 +146,7 @@ With your experience, skip beginner video courses (KodeKloud lectures, generic A
 - [Chainguard Academy](https://edu.chainguard.dev/): work through the Sigstore, SBOM and SLSA material
 - [OpenSSF Developing Secure Software (LFD121)](https://training.linuxfoundation.org/training/developing-secure-software-lfd121/): free course; do the supply chain and dependency sections
 - [Semgrep Academy](https://semgrep.dev/learn): learn to read and tune rules, then run Semgrep on your Go service
-- Own lab ([lab.md](lab.md)): build the Go service in CI, push the signed image, and keep it ready for Weeks 9–10 when Kyverno will verify the signature on the kind cluster
+- Own lab ([lab.md](lab.md)): build the Go service in CI, push the signed image, and keep it ready for [cka_cks.md](cka_cks.md) Week 7, when Kyverno verifies the signature on the kind cluster
 
 **Test yourself**
 - [ ] Explain keyless signing end to end: who issues the cert, what's logged in Rekor, and what `cosign verify` checks
@@ -155,135 +155,22 @@ With your experience, skip beginner video courses (KodeKloud lectures, generic A
 - [ ] Given a package name an AI assistant suggested, decide in under 5 minutes whether it's safe to add, and say which signals you used
 - [ ] Introduce a dependency with a known CRITICAL CVE and confirm the pipeline blocks
 
-### Weeks 6–8: CKA (prerequisite for CKS)
+### Weeks 6–11: CKA → CKS
 
-**Learn**
-- [ ] CKA curriculum domains and their weights, and which ones you rarely touch day to day
-- [ ] kubeadm: `init`, `join`, certificates, static pod manifests, and where the kubelet config lives
-- [ ] Cluster upgrades with kubeadm: control plane first, drain/uncordon nodes, version skew rules
-- [ ] etcd backup and restore with `etcdctl snapshot save/restore`, including certs and data directory changes
-- [ ] Troubleshooting a broken node or control plane: kubelet logs via `journalctl`, static pod errors, `crictl`
-- [ ] Networking: Services, DNS resolution, CNI, NetworkPolicy, Ingress and Gateway API
-- [ ] Storage: StorageClass, PV, PVC, access modes and reclaim policies
-- [ ] RBAC: Role vs ClusterRole, bindings, and `kubectl auth can-i --as`
-- [ ] Exam speed: imperative commands, `--dry-run=client -o yaml`, `kubectl explain`, aliases, switching contexts
-
-**Tools**
-- **kubeadm**: build, upgrade and repair clusters by hand
-- **`kubectl`**: everything in the exam
-- **`etcdctl`**: snapshot and restore etcd
-- **killer.sh**: exam simulator
-
-**Practice**
-- [killer.sh](https://killer.sh/): use both CKA simulator sessions that come with the exam, the first early in Week 7 and the second a few days before the exam
-- [Killercoda CKA scenarios](https://killercoda.com/killer-shell-cka): free browser-based tasks; do them daily for speed
-- [KodeKloud](https://kodekloud.com/) (optional, paid): only if your first killer.sh score shows gaps. Use the CKA mock exams and labs, skip the lectures, and subscribe for one month
-- [Kubernetes the Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way): build a cluster without kubeadm once to understand what kubeadm automates
-- [etcd backup and restore docs](https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/): practice snapshot and restore until you can do it from memory
-- [CNCF curriculum](https://github.com/cncf/curriculum): check the current CKA PDF and tick off each domain
-- Own lab ([lab.md](lab.md)): use the 2–3 kubeadm VMs to install, upgrade one minor version, back up etcd, break it, and restore
-
-**Test yourself**
-- [ ] Without notes, back up and restore etcd on a kubeadm cluster in under 10 minutes
-- [ ] Upgrade a kubeadm control plane and one worker by one minor version without docs, except the official upgrade page
-- [ ] Fix a node in `NotReady` caused by a stopped or misconfigured kubelet in under 5 minutes
-- [ ] Explain how a pod resolves `svc.namespace.svc.cluster.local`, step by step
-- [ ] Score at least 80% on a killer.sh CKA session before booking the exam (killer.sh is harder than the real exam; the real pass mark is about 66%)
-
-### Weeks 9–10: Cluster Hardening & Admission Control (CKS domains)
-
-**Learn**
-- [ ] Pod breakout paths: `privileged`, `hostPID`, `hostNetwork`, `hostPath` mounts, and dangerous capabilities like `CAP_SYS_ADMIN`
-- [ ] Pod Security Standards (Privileged/Baseline/Restricted) and Pod Security Admission labels on namespaces
-- [ ] `securityContext`: `runAsNonRoot`, `readOnlyRootFilesystem`, `allowPrivilegeEscalation`, dropping capabilities
-- [ ] seccomp `RuntimeDefault` and custom profiles; AppArmor profiles on nodes
-- [ ] RBAC risks: wildcard verbs, `escalate`/`bind`/`impersonate`, `create pods` as a privilege path, reading Secrets
-- [ ] API server hardening: anonymous auth, authorization modes, kubelet authentication, restricting access to the API endpoint
-- [ ] Admission control: validating vs mutating webhooks and how Kyverno fits in
-- [ ] Kyverno `verifyImages` for Cosign signatures, and policies blocking `hostPID`, `CAP_SYS_ADMIN` and root
-- [ ] NetworkPolicy: default-deny, namespace isolation, and egress control
-- [ ] CIS Kubernetes Benchmark: what `kube-bench` checks and which findings managed clusters can't fix
-
-**Tools**
-- **Kyverno**: admission policies, including Cosign image verification
-- **Pod Security Standards**: built-in namespace-level pod restrictions
-- **seccomp / AppArmor**: restrict syscalls and file access for containers
-- **`kube-bench`**: run CIS Benchmark checks on nodes and control plane
-- **`kubescape`**: scan cluster and manifests against NSA/MITRE/CIS frameworks
-- **NetworkPolicies**: restrict pod-to-pod and egress traffic
-
-**Practice**
-- [Kubernetes Goat](https://madhuakula.com/kubernetes-goat/): deploy the vulnerable cluster and work through the scenarios, then write a Kyverno policy that would have prevented each one
-- [Bad Pods](https://github.com/BishopFox/badPods): run each pod manifest, escape to the node, then confirm your Kyverno/PSA setup rejects it
-- [Killercoda CKS scenarios](https://killercoda.com/killer-shell-cks): free hands-on tasks for each CKS domain
-- [EKS Best Practices Guide](https://docs.aws.amazon.com/eks/latest/best-practices/introduction.html) (reference, not a lab): read the security section and compare it with your hardened cluster
-- [Wiz K8s LAN Party](https://k8slanparty.com/): CTF on Kubernetes network misconfigurations
-- [Kyverno policy library](https://kyverno.io/policies/) and [verifyImages docs](https://kyverno.io/docs/policy-types/cluster-policy/verify-images/): start from library policies and add Cosign verification for your Week 5 image
-- Own lab ([lab.md](lab.md)): harden the kind `lab` cluster (Cilium enforces NetworkPolicy), apply default-deny, run `kube-bench` on a kubeadm VM, and document the remaining findings
-
-**Test yourself**
-- [ ] Explain how `hostPID: true` plus `privileged: true` gives you root on the node
-- [ ] Without notes, write a pod spec that passes the Restricted Pod Security Standard
-- [ ] Write a Kyverno policy from memory that rejects containers running as root, and show it blocking a test pod
-- [ ] Deploy an unsigned image and show Kyverno rejecting it, then deploy your signed one and show it admitted
-- [ ] Given a ClusterRole, name which verbs or resources make it equivalent to cluster-admin
-- [ ] Write a default-deny NetworkPolicy plus one allow rule in under 5 minutes
-
-### Week 11: Runtime Detection & Audit Logging (CKS domain, bridge to Phase 2)
-
-**Learn**
-- [ ] How Falco works: syscall events from the kernel, the `modern_ebpf` driver, and enrichment with container/Kubernetes metadata
-- [ ] Falco rule anatomy: `rule`, `condition`, `output`, `priority`, lists and macros
-- [ ] Tuning: overriding default rules, exceptions, and why noisy rules get ignored
-- [ ] What a reverse shell and a container escape look like at syscall level
-- [ ] Kubernetes audit policy: stages, levels (`None`, `Metadata`, `Request`, `RequestResponse`) and rule ordering
-- [ ] Why `RequestResponse` on Secrets is a trade-off (it logs secret values) and how to control access to audit logs
-- [ ] Audit log backends: log file vs webhook, and enabling them via API server flags in a kubeadm static pod
-- [ ] Falcosidekick: forwarding alerts to Slack, Loki or a SIEM
-- [ ] Mapping detections to MITRE ATT&CK for Containers techniques
-
-**Tools**
-- **Falco (`modern_ebpf` driver)**: runtime syscall detection
-- **Kubernetes API server audit policy**: record who did what to which object
-- **Falcosidekick**: route Falco alerts to other systems
-
-**Practice**
-- [Falco docs](https://falco.org/docs/) and [rules concepts](https://falco.org/docs/concepts/rules/): install with Helm and write your first custom rule
-- [falcosecurity/rules](https://github.com/falcosecurity/rules): read the default rules for shells in containers and writes below `/etc`, and adapt them
-- [falcosecurity/event-generator](https://github.com/falcosecurity/event-generator): generate suspicious activity to confirm your rules fire
-- [Kubernetes auditing docs](https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/): write the audit policy and enable it on the API server
-- [Kubernetes Goat](https://madhuakula.com/kubernetes-goat/): rerun earlier attack scenarios with Falco running and check what it catches and misses
-- Own lab ([lab.md](lab.md)): run Falco on the kind `lab` cluster (or a kubeadm VM if the WSL2 kernel doesn't support the driver), send alerts through Falcosidekick to Loki, and enable the audit policy on a kubeadm VM
-
-**Test yourself**
-- [ ] Without notes, write a Falco rule that fires on an outbound shell connection from a container
-- [ ] Simulate a reverse shell and a write to `/etc` in a pod, and show both alerts within seconds
-- [ ] Without notes, write an audit policy: `RequestResponse` for Secrets and RBAC objects, `Metadata` for everything else
-- [ ] From an audit log, find who deleted a given Secret and when, in under 5 minutes
-- [ ] Explain what Falco can see that audit logs can't, and the reverse
+Use [cka_cks.md](cka_cks.md): it has the per-week topics, resources, milestones and exam tactics for both exams, and maps its weeks onto these.
 
 ### Week 12: CKS + Job Readiness (buffer week)
 
 **Learn**
-- [ ] CKS curriculum domains and weights; re-check weak areas from killer.sh results
-- [ ] Exam speed for CKS-specific tasks: AppArmor, seccomp, audit policy, Falco, image scanning, admission configuration
-- [ ] Editing static pod manifests safely (back up first, wait for the API server to restart)
 - [ ] How to tell the "secure delivery path" story in one diagram: commit → IaC scan → OIDC → Vault/ESO → signed image → admission → runtime
 - [ ] How to frame your existing security work (firewall/VPN Operator, AWS Shield Operator, RBAC/IAM, Keycloak SSO, Sealed Secrets) as security achievements on a CV
 
-**Tools**
-- **killer.sh**: CKS simulator
-- **`kubectl`, Kyverno, Falco, Trivy, `kube-bench`**: everything from Weeks 9–11, at exam speed
-
 **Practice**
-- [killer.sh](https://killer.sh/): use both CKS simulator sessions; redo every question you missed until it's fast
-- [Killercoda CKS scenarios](https://killercoda.com/killer-shell-cks): daily speed drills on weak domains
+- CKS exam prep: [cka_cks.md](cka_cks.md) Week 9
 - [Wiz EKS Cluster Games](https://eksclustergames.com/): CTF on EKS misconfigurations, a good warm-up for cloud-side Kubernetes interviews
-- [CNCF curriculum](https://github.com/cncf/curriculum): tick off the current CKS PDF line by line
 - Own lab ([lab.md](lab.md)): rebuild the kind `lab` cluster from Git with the full Phase 1 stack in one command, and use it for the capstone diagram and write-up
 
 **Test yourself**
-- [ ] Score at least 80% on a killer.sh CKS session before the exam (the real pass mark is about 67%)
 - [ ] Present the capstone diagram out loud in 5 minutes, naming the threat each control stops
 - [ ] Destroy and rebuild the whole lab from Git without manual steps
 - [ ] Answer "tell me about a security problem you solved" with a story from your CV in under 2 minutes
@@ -681,7 +568,7 @@ With your experience, skip beginner video courses (KodeKloud lectures, generic A
 - [Volatility 3 docs](https://volatility3.readthedocs.io/): follow the Linux symbol tables section and build symbols for your lab kernel with [dwarf2json](https://github.com/volatilityfoundation/dwarf2json)
 - [TryHackMe: Volatility Essentials](https://tryhackme.com/room/volatilityessentials): guided memory analysis case
 - [CyberDefenders](https://cyberdefenders.org/blueteam-ctf-challenges/): filter for Endpoint Forensics and do 2 Linux disk/memory labs
-- [Kubernetes forensic container checkpointing](https://kubernetes.io/blog/2022/12/05/forensic-container-checkpointing-alpha/): checkpoint a running container and analyse the archive offline
+- [Kubelet Checkpoint API](https://kubernetes.io/docs/reference/node/kubelet-checkpoint-api/): checkpoint a running container and analyse the archive offline
 - Your lab: run a pod that drops a script and beacons out (Falco will alert from Week 11), then `kubectl debug`, checkpoint it, diff it against its image and recover the script
 
 **Test yourself**

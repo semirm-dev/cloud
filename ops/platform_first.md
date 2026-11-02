@@ -56,8 +56,7 @@ Commit everything to one public repo (`platform-lab/`). It's your portfolio.
 - **Milestone:** CI provisions infrastructure with **no static secrets** in GitHub settings, and the trust policy rejects forks and other branches. The app's Postgres credentials are short-lived Vault leases delivered by ESO through Argo CD. Revoking a lease kills access within the TTL.
 
 ### Weeks 5–7: CKA
-- Mostly exam practice for you: kubeadm cluster setup and upgrade, etcd backup/restore, scheduling, Services/Ingress/Gateway API, NetworkPolicies, storage, troubleshooting broken nodes and workloads.
-- Practise under time pressure with the killer.sh simulator (two sessions come with the exam).
+- Follow Phase A (Weeks 0–4) of [cka_cks.md](cka_cks.md). Its table maps those weeks onto Weeks 5–7 here.
 - **Milestone:** pass CKA by the end of Week 7.
 - **Start applying from Week 6.**
 
@@ -118,7 +117,7 @@ Learn each item when you take it on at work. Each comes with what it covers and 
   - Rolling the Week 3 standards (pinned actions, least privilege, OIDC, Scorecard) out across every team's pipelines, through shared reusable workflows.
 
 ### Certification
-- **CKS around month 9.** The checklist above covers most of its domains: cluster setup and hardening, system hardening, microservice security, supply chain, runtime security and audit. CKS requires an active CKA, which you'll have from Stage 1.
+- **CKS around month 9.** The checklist above covers most of its domains: cluster setup and hardening, system hardening, microservice security, supply chain, runtime security and audit. Prepare with Phase B (Weeks 5–9) of [cka_cks.md](cka_cks.md). CKS requires an active CKA, which you'll have from Stage 1.
 
 ### When to Move to the Next Title
 Once you've owned **3 or more checklist items in production**, either ask for the Platform Security / DevSecOps title internally or start applying for it. Platform Security Engineer is a strong destination in its own right. Stage 3 is optional.

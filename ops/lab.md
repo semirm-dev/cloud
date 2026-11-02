@@ -1,6 +1,6 @@
 # Kubernetes Lab Reference: Local and Production
 
-A companion to [platform_first.md](platform_first.md).
+A companion to [platform_first.md](platform_first.md) and [cka_cks.md](cka_cks.md).
 
 **Core rule:** keep clusters disposable. Install everything from Git with Terraform, Helm and Argo CD, so the local lab and production run the same stack on different clusters.
 
@@ -9,7 +9,7 @@ A companion to [platform_first.md](platform_first.md).
 | Where | Tool | Why |
 |---|---|---|
 | Local lab + CI | **kind** | Kubernetes nodes as Docker containers. Multi-node, recreated in seconds. Kubernetes uses it for its own CI. |
-| CKA practice | **kubeadm** on 2–3 VMs | The upstream installer. You do cluster setup, upgrades and etcd backup/restore yourself. |
+| CKA/CKS practice | **kubeadm** on 3 VMs | The upstream installer. You do cluster setup, upgrades and etcd backup/restore yourself, plus the CKS node and API server work (audit policy, encryption at rest, admission). |
 | Production (cloud) | **EKS** (or GKE/AKS) | What most companies run. The provider runs the control plane and etcd. Provisioned with Terraform. |
 | Production (on-prem) | **kubeadm** via **Kubespray** | Kubespray is Ansible that runs kubeadm across many nodes, with HA and upgrades. |
 

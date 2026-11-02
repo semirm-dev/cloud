@@ -6,6 +6,8 @@ This is the direct path from DevSecOps to DFIR (Digital Forensics & Incident Res
 
 **If you follow `platform_first.md` first:** its Stages 1–2 cover Phase 1 here (Weeks 1–12), including CKA and CKS. Start at Phase 2.
 
+**CKA and CKS:** [cka_cks.md](cka_cks.md) is the detailed plan for both exams (Weeks 6–12 here).
+
 ---
 
 **Candidate Background (from CV):**
@@ -59,22 +61,12 @@ Commit every lab to one public repo (`security-lab/`). It doubles as your portfo
 - **Topics:** verifying a new dependency is real and established before adding it (age, maintainers, downloads); lockfiles and Go checksum DB (`GOSUMDB`) so a dependency can't silently change.
 - **Milestone:** a pipeline that builds a Go service, generates an SBOM, signs the image and attests its provenance with Cosign, and blocks on CRITICAL CVEs.
 
-### Weeks 6–8: CKA (prerequisite for CKS)
-- **CKS requires a passed, active CKA.** Your daily Kubernetes experience makes this mostly exam practice: kubeadm, etcd backup/restore, troubleshooting, networking. Use the killer.sh simulator.
-- **Milestone:** **pass CKA by the end of Week 8.**
-
-### Weeks 9–10: Cluster Hardening & Admission Control (CKS domains)
-- **Threat model:** privileged pod breakouts, hostPath/hostPID, root containers, weak RBAC, anonymous API access.
-- **Tooling:** Kyverno, Pod Security Standards, seccomp, AppArmor, `kube-bench`, `kubescape`, NetworkPolicies.
-- **Milestone:** a hardened kind/kubeadm cluster with Kyverno policies that reject unsigned images (Cosign verification), `hostPID`, `CAP_SYS_ADMIN` and root users. It should pass `kube-bench`, with any remaining findings documented.
-
-### Week 11: Runtime Detection & Audit Logging (CKS domain, bridge to Phase 2)
-- **Threat model:** reverse shells, container escapes, unauthorized API actions.
-- **Tooling:** Falco (`modern_ebpf` driver), Kubernetes API server audit policy, Falcosidekick.
-- **Milestone:** custom Falco rules catch a simulated reverse shell and a write to `/etc`. The audit policy logs `RequestResponse` on Secrets and RBAC objects and `Metadata` on everything else.
+### Weeks 6–11: CKA → CKS
+- **Follow [cka_cks.md](cka_cks.md).** It is the canonical plan for both exams, with a table mapping its weeks onto these. CKS requires a passed, active CKA.
+- **Milestones:** pass CKA by the end of Week 8. By Week 11, a hardened kubeadm cluster (kube-bench, PSA, audit policy, encryption at rest, ImagePolicyWebhook), Kyverno + Cosign on the kind `lab` cluster, Falco rules, and a published incident drill: isolate, checkpoint, timeline.
 
 ### Week 12: CKS + Job Readiness (buffer week)
-- **Pass CKS.**
+- **Pass CKS** ([cka_cks.md](cka_cks.md) Week 9).
 - **Capstone write-up:** "Secure delivery path from commit to pod". Cover IaC scanning, OIDC, Vault/ESO, signed images, admission control and runtime detection, all in one diagram.
 - **CV:** rewrite around the Cisco firewall/VPN Operator, AWS Shield Operator, RBAC/IAM tightening, Keycloak SSO and Sealed Secrets, plus the Phase 1 lab. **Start applying for DevSecOps roles from Week 10.**
 
@@ -140,7 +132,7 @@ Commit every lab to one public repo (`security-lab/`). It doubles as your portfo
 ### Week 27: Cloud & Kubernetes Forensics (your specialty)
 - **Threat model:** stolen credentials used from attacker infrastructure, persistence via new IAM users/keys/roles, data exfiltration from S3, cryptominers in pods.
 - **Tooling:** CloudTrail Lake or Athena, S3 server access logs, VPC Flow Logs, Kubernetes audit logs, Invictus IR cloud forensics material, AWS IR workshops.
-- **Topics:** evidence acquisition in AWS (isolate, snapshot EBS, capture memory, export logs to a separate forensic account) and in Kubernetes (`kubectl debug`, checkpointing containers, node snapshots); chain of custody for cloud evidence; scoping the blast radius of a stolen key.
+- **Topics:** evidence acquisition in AWS (isolate, snapshot EBS, capture memory, export logs to a separate forensic account) and in Kubernetes (`kubectl debug`, checkpointing containers, node snapshots; you first did these in the [cka_cks.md](cka_cks.md) Week 8 drill, so scale them up here); chain of custody for cloud evidence; scoping the blast radius of a stolen key.
 - **Milestone:** from a simulated leaked-key incident, build the full timeline from CloudTrail: first attacker API call, recon, persistence, and data accessed. Write the scoping answer: what the attacker could reach and what they actually touched.
 
 ### Week 28: Phishing Analysis & Threat Intelligence
