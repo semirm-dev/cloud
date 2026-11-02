@@ -7,9 +7,9 @@
 - **Long run:** Cloud DFIR. CKS is already half of it: audit logs, runtime detection and supply chain are where an investigation starts. This plan practises them as **evidence**, not only as exam answers.
 - **Philosophy:** Terminal over video. Labs and simulators over lectures. Killer.sh is the finish line.
 
-This is the canonical CKA/CKS plan for [blue.md](blue.md) (Phase 1, Weeks 6–12) and [platform_first.md](platform_first.md) (CKA in Stage 1, CKS in Stage 2). Week numbers below are this plan's own; map them like this:
+This is the canonical CKA/CKS plan for [4_blue.md](4_blue.md) (Phase 1, Weeks 6–12) and [2_platform.md](2_platform.md) (CKA in Stage 1, CKS in Stage 2). Week numbers below are this plan's own; map them like this:
 
-| This plan | 17.5 h/week | [blue.md](blue.md) (24 h/week) | [platform_first.md](platform_first.md) |
+| This plan | 17.5 h/week | [4_blue.md](4_blue.md) (24 h/week) | [2_platform.md](2_platform.md) |
 | :-- | :-- | :-- | :-- |
 | Week 0: setup | Week 0 | end of Week 5 | end of Week 4 |
 | Weeks 1–3: CKA domains | Weeks 1–3 | Weeks 6–7 | Weeks 5–6 |
@@ -19,7 +19,7 @@ This is the canonical CKA/CKS plan for [blue.md](blue.md) (Phase 1, Weeks 6–12
 | Week 8: runtime, audit, DFIR | Week 8 | Week 11 | Stage 2 |
 | Week 9: CKS exam | Week 9 | Week 12 | Stage 2 |
 
-On the blue.md pace Week 7 is short: SBOMs, Trivy and Cosign are already done in blue.md Week 5, so only ImagePolicyWebhook and manifest analysis are new.
+On the 4_blue.md pace Week 7 is short: SBOMs, Trivy and Cosign are already done in 4_blue.md Week 5, so only ImagePolicyWebhook and manifest analysis are new.
 
 ## 2. Before you start: verify these yourself
 
@@ -45,7 +45,7 @@ Bundle: [Linux Foundation CKA + CKS](https://training.linuxfoundation.org/certif
 
 ## 4. The lab: kubeadm for the exam, kind for the stack
 
-`kind` cannot teach kubeadm upgrades, a broken kubelet or an etcd restore on a real node. Both clusters come from [lab.md](lab.md):
+`kind` cannot teach kubeadm upgrades, a broken kubelet or an etcd restore on a real node. Both clusters come from [1_lab.md](1_lab.md):
 
 - **kubeadm VMs** (exam work): 3 VMs, 1 control plane, 2 workers, kubeadm, containerd. Everything that touches nodes or the API server runs here: upgrades, etcd, break-and-fix, audit policy, encryption at rest, ImagePolicyWebhook, AppArmor, gVisor, checkpointing.
   - Pin it to one minor version **below** the exam's, so Week 1 can upgrade it to the exam version.
@@ -69,7 +69,7 @@ Book both exam dates in Week 0: CKA at end of Week 4, CKS at end of Week 9. If K
 
 - [ ] Buy the bundle, confirm everything in Section 2.
 - [ ] Build the kubeadm VMs (Section 4). Optional: Kubernetes the Hard Way once, to see what kubeadm automates.
-- [ ] Create the public `security-lab/` repo with a README skeleton.
+- [ ] Create the public `security-lab/` repo with a README skeleton. On the [2_platform.md](2_platform.md) path, use `platform-lab/` instead and keep one portfolio repo.
 - [ ] Blog: polish 4–5 posts ahead, then drop to **1 post/week** until Week 9. Two a week at full polish does not fit beside 17.5 study hours and a job.
 
 ---
@@ -85,7 +85,7 @@ Domains: Troubleshooting 30% · Cluster Architecture, Installation & Configurati
 - Highly-available control plane: know the topologies, not how to build one from memory.
 - **Helm and Kustomize** to install cluster components: [Helm docs](https://helm.sh/docs/), [Kustomize](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/)
 - Extension interfaces: CNI, CSI, CRI, what each one plugs into.
-- **CRDs and operators**: revision only, you write operators daily.
+- **CRDs and operators**: revision. You've built them before; refresh with the [Kubebuilder book](https://book.kubebuilder.io/) if it's rusty.
 - **RBAC**: Role vs ClusterRole, bindings, `kubectl auth can-i --as`. It is in the CKA Cluster Architecture domain, not only CKS: [RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)
 
 **Milestones**

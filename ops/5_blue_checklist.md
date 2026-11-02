@@ -1,6 +1,6 @@
 # Study Checklist: DevSecOps → DFIR
 
-Companion to `blue.md`. For each week: what to **learn**, the **tools**, where to **practice**, and how to **test yourself**. Tick a box only when you can do it without notes.
+Companion to `4_blue.md`. For each week: what to **learn**, the **tools**, where to **practice**, and how to **test yourself**. Tick a box only when you can do it without notes.
 
 ---
 
@@ -36,7 +36,7 @@ With your experience, skip beginner video courses (KodeKloud lectures, generic A
 - [CloudGoat](https://github.com/RhinoSecurityLabs/cloudgoat): deploy a scenario (it's Terraform under the hood), exploit it, then find the line of Terraform that caused it
 - [The Big IAM Challenge](https://bigiamchallenge.com): read and exploit misconfigured IAM and resource policies to train your eye for over-broad IAM
 - [Terraform S3 backend docs](https://developer.hashicorp.com/terraform/language/backend/s3): set up encrypted state with `use_lockfile = true` and verify a second `apply` is blocked by the lock
-- Own lab ([lab.md](lab.md)): provision the EKS production checklist's VPC, EKS and IAM with Terraform, test once, then `terraform destroy` the same day
+- Own lab ([1_lab.md](1_lab.md)): provision the EKS production checklist's VPC, EKS and IAM with Terraform, test once, then `terraform destroy` the same day
 
 **Test yourself**
 - [ ] Explain out loud why Terraform state must be treated as a secret, and list three things in it an attacker would want
@@ -72,7 +72,7 @@ With your experience, skip beginner video courses (KodeKloud lectures, generic A
 - [OWASP Top 10 CI/CD Security Risks](https://owasp.org/www-project-top-10-ci-cd-security-risks/): map each risk to a control in your own pipeline
 - [GitHub Security Lab: preventing pwn requests](https://securitylab.github.com/resources/github-actions-preventing-pwn-requests/) and [untrusted input](https://securitylab.github.com/resources/github-actions-untrusted-input/): reproduce one injection in a scratch repo, then fix it
 - [GitHub OIDC for AWS](https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services): replace any static AWS keys in the Weeks 1–2 pipeline with an OIDC role
-- Own lab ([lab.md](lab.md)): add a `helm/kind-action` job that spins up a throwaway kind cluster, with SHA-pinned actions and least-privilege `permissions:`, and run zizmor and Scorecard on the repo
+- Own lab ([1_lab.md](1_lab.md)): add a `helm/kind-action` job that spins up a throwaway kind cluster, with SHA-pinned actions and least-privilege `permissions:`, and run zizmor and Scorecard on the repo
 
 **Test yourself**
 - [ ] Explain why `pull_request_target` plus `actions/checkout` of the PR head is dangerous
@@ -108,7 +108,7 @@ With your experience, skip beginner video courses (KodeKloud lectures, generic A
 - [ESO HashiCorp Vault provider](https://external-secrets.io/latest/provider/hashicorp-vault/): connect ESO to Vault with Kubernetes auth
 - [Argo CD projects](https://argo-cd.readthedocs.io/en/stable/user-guide/projects/) and [RBAC](https://argo-cd.readthedocs.io/en/stable/operator-manual/rbac/): build a restricted AppProject and map Keycloak groups to roles
 - [EKS Pod Identity docs](https://docs.aws.amazon.com/eks/latest/userguide/pod-identities.html): give a pod S3 access with Pod Identity on the throwaway EKS cluster, then do the same with IRSA and compare
-- Own lab ([lab.md](lab.md)): install Vault, ESO and Argo CD on the kind `lab` cluster with Helm, deploy Postgres plus an app using dynamic creds, and plant a fake key to confirm Gitleaks blocks the commit
+- Own lab ([1_lab.md](1_lab.md)): install Vault, ESO and Argo CD on the kind `lab` cluster with Helm, deploy Postgres plus an app using dynamic creds, and plant a fake key to confirm Gitleaks blocks the commit
 
 **Test yourself**
 - [ ] Explain the three reasons to move from Sealed Secrets to ESO + Vault, as you would to a hiring manager
@@ -146,7 +146,7 @@ With your experience, skip beginner video courses (KodeKloud lectures, generic A
 - [Chainguard Academy](https://edu.chainguard.dev/): work through the Sigstore, SBOM and SLSA material
 - [OpenSSF Developing Secure Software (LFD121)](https://training.linuxfoundation.org/training/developing-secure-software-lfd121/): free course; do the supply chain and dependency sections
 - [Semgrep Academy](https://semgrep.dev/learn): learn to read and tune rules, then run Semgrep on your Go service
-- Own lab ([lab.md](lab.md)): build the Go service in CI, push the signed image, and keep it ready for [cka_cks.md](cka_cks.md) Week 7, when Kyverno verifies the signature on the kind cluster
+- Own lab ([1_lab.md](1_lab.md)): build the Go service in CI, push the signed image, and keep it ready for [3_cka_cks.md](3_cka_cks.md) Week 7, when Kyverno verifies the signature on the kind cluster
 
 **Test yourself**
 - [ ] Explain keyless signing end to end: who issues the cert, what's logged in Rekor, and what `cosign verify` checks
@@ -157,7 +157,7 @@ With your experience, skip beginner video courses (KodeKloud lectures, generic A
 
 ### Weeks 6–11: CKA → CKS
 
-Use [cka_cks.md](cka_cks.md): it has the per-week topics, resources, milestones and exam tactics for both exams, and maps its weeks onto these.
+Use [3_cka_cks.md](3_cka_cks.md): it has the per-week topics, resources, milestones and exam tactics for both exams, and maps its weeks onto these.
 
 ### Week 12: CKS + Job Readiness (buffer week)
 
@@ -166,9 +166,9 @@ Use [cka_cks.md](cka_cks.md): it has the per-week topics, resources, milestones 
 - [ ] How to frame your existing security work (firewall/VPN Operator, AWS Shield Operator, RBAC/IAM, Keycloak SSO, Sealed Secrets) as security achievements on a CV
 
 **Practice**
-- CKS exam prep: [cka_cks.md](cka_cks.md) Week 9
+- CKS exam prep: [3_cka_cks.md](3_cka_cks.md) Week 9
 - [Wiz EKS Cluster Games](https://eksclustergames.com/): CTF on EKS misconfigurations, a good warm-up for cloud-side Kubernetes interviews
-- Own lab ([lab.md](lab.md)): rebuild the kind `lab` cluster from Git with the full Phase 1 stack in one command, and use it for the capstone diagram and write-up
+- Own lab ([1_lab.md](1_lab.md)): rebuild the kind `lab` cluster from Git with the full Phase 1 stack in one command, and use it for the capstone diagram and write-up
 
 **Test yourself**
 - [ ] Present the capstone diagram out loud in 5 minutes, naming the threat each control stops
@@ -239,7 +239,7 @@ Use [cka_cks.md](cka_cks.md): it has the per-week topics, resources, milestones 
 - [GuardDuty sample findings](https://docs.aws.amazon.com/guardduty/latest/ug/sample_findings.html): generate sample findings to test your EventBridge-to-SIEM route without a real attack
 - [amazon-guardduty-tester](https://github.com/awslabs/amazon-guardduty-tester): trigger real findings in a sandbox account, then find the matching CloudTrail and flow-log evidence yourself
 - [GuardDuty active finding types](https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_finding-types-active.html): use it as the source for your coverage map (what's covered vs. what needs a custom rule)
-- **Your lab:** GuardDuty can't see kind. Write down which Week 13–14 lab detections (Falco, audit) have a GuardDuty equivalent on EKS, then confirm it on the same-day EKS cluster from lab.md
+- **Your lab:** GuardDuty can't see kind. Write down which Week 13–14 lab detections (Falco, audit) have a GuardDuty equivalent on EKS, then confirm it on the same-day EKS cluster from 1_lab.md
 
 **Test yourself**
 - [ ] Explain which three data sources GuardDuty reads by default, and what you lose if you also disable your own CloudTrail trail

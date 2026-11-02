@@ -1,6 +1,6 @@
 # Kubernetes Lab Reference: Local and Production
 
-A companion to [platform_first.md](platform_first.md) and [cka_cks.md](cka_cks.md).
+A companion to [2_platform.md](2_platform.md) and [3_cka_cks.md](3_cka_cks.md).
 
 **Core rule:** keep clusters disposable. Install everything from Git with Terraform, Helm and Argo CD, so the local lab and production run the same stack on different clusters.
 

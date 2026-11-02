@@ -1,12 +1,12 @@
 # Roadmap: Senior Platform Engineer, Security-Focused
 
-This roadmap gets you the official title first, then turns it toward security. It's self-contained. The follow-on is `blue.md` (DevSecOps → DFIR, cloud specialization).
+This roadmap gets you the official title first, then turns it toward security. It's self-contained. The follow-on is `4_blue.md` (DevSecOps → DFIR, cloud specialization).
 
 | Stage | What it is | Duration | Title at the end |
 |---|---|---|---|
-| 1 | Study alongside your current job (4 h/day, 6 days/week) | 12 weeks | **Senior Platform Engineer** |
+| 1 | Study alongside your current job (4 h/day, 6 days/week) | 13 weeks (Week 0 + 12) | **Senior Platform Engineer** |
 | 2 | Full-time platform job, security as your chosen focus | 12–18 months | **Platform Security / DevSecOps Engineer** |
-| 3 | Detection, investigation & DFIR (next step) | see `blue.md` Phases 2–3 | **Incident Responder / Cloud IR Engineer** |
+| 3 | Detection, investigation & DFIR (next step) | see `4_blue.md` Phases 2–3 | **Incident Responder / Cloud IR Engineer** |
 
 ---
 
@@ -25,6 +25,15 @@ Commit everything to one public repo (`platform-lab/`). It's your portfolio.
 ---
 
 ## Stage 1: Get Hired as a Senior Platform Engineer (Weeks 1 – 12)
+
+### Week 0: Lab & Kubernetes Refresh (1 week)
+- **Objective:** a lab you can rebuild from Git, and Kubernetes back in your fingers. Weeks 1–4 build on both.
+- **Days 1–2: build the lab.** The kind `lab` cluster from [1_lab.md](1_lab.md), committed to `platform-lab/`. Type the config and bootstrap yourself and look up every line you can't explain (why Cilium, why no kube-proxy). EKS is only for the Weeks 1–2 Terraform test.
+- **Days 3–5: rebuild the basics on it, from memory first, docs second.** Deployment with rollout and rollback, ConfigMap and Secret, Service and DNS, PVC, ServiceAccount + Role + `kubectl auth can-i`, a default-deny NetworkPolicy (Cilium enforces it), then Argo CD deploying the same app from Git.
+- **Day 6: what changed recently.** Gateway API (v1, the Ingress successor), ingress-nginx retired in March 2026, native sidecar containers, ValidatingAdmissionPolicy (CEL, no webhook), Pod Security Admission, containerd 2.x. Read the release notes of the last few minor versions with these in mind.
+- **Diagnostic:** 10 [Killercoda CKA](https://killercoda.com/killer-shell-cka) scenarios. The ones you fail are your CKA weak spots, so note them for [3_cka_cks.md](3_cka_cks.md).
+- The kubeadm VMs wait until [3_cka_cks.md](3_cka_cks.md) Week 0, at the end of Week 4.
+- **Milestone:** `kind delete cluster --name lab`, then one bootstrap brings back Cilium, Argo CD and the app, in under 10 minutes. The app's Deployment, Service, HTTPRoute and NetworkPolicy are written without copying.
 
 ### Weeks 1–2: Terraform & IaC Security
 - **Objective:** maintainable, modular, multi-account infrastructure code, with misconfigurations caught before `apply`.
@@ -56,7 +65,7 @@ Commit everything to one public repo (`platform-lab/`). It's your portfolio.
 - **Milestone:** CI provisions infrastructure with **no static secrets** in GitHub settings, and the trust policy rejects forks and other branches. The app's Postgres credentials are short-lived Vault leases delivered by ESO through Argo CD. Revoking a lease kills access within the TTL.
 
 ### Weeks 5–7: CKA
-- Follow Phase A (Weeks 0–4) of [cka_cks.md](cka_cks.md). Its table maps those weeks onto Weeks 5–7 here.
+- Follow Phase A (Weeks 0–4) of [3_cka_cks.md](3_cka_cks.md). Its table maps those weeks onto Weeks 5–7 here.
 - **Milestone:** pass CKA by the end of Week 7.
 - **Start applying from Week 6.**
 
@@ -117,7 +126,7 @@ Learn each item when you take it on at work. Each comes with what it covers and 
   - Rolling the Week 3 standards (pinned actions, least privilege, OIDC, Scorecard) out across every team's pipelines, through shared reusable workflows.
 
 ### Certification
-- **CKS around month 9.** The checklist above covers most of its domains: cluster setup and hardening, system hardening, microservice security, supply chain, runtime security and audit. Prepare with Phase B (Weeks 5–9) of [cka_cks.md](cka_cks.md). CKS requires an active CKA, which you'll have from Stage 1.
+- **CKS around month 9.** The checklist above covers most of its domains: cluster setup and hardening, system hardening, microservice security, supply chain, runtime security and audit. Prepare with Phase B (Weeks 5–9) of [3_cka_cks.md](3_cka_cks.md). CKS requires an active CKA, which you'll have from Stage 1.
 
 ### When to Move to the Next Title
 Once you've owned **3 or more checklist items in production**, either ask for the Platform Security / DevSecOps title internally or start applying for it. Platform Security Engineer is a strong destination in its own right. Stage 3 is optional.
@@ -126,7 +135,7 @@ Once you've owned **3 or more checklist items in production**, either ask for th
 
 ## Stage 3: Detection, Investigation & DFIR
 
-Continue with **`blue.md` from Phase 2** (security telemetry, queries, adversary emulation, IR playbooks), then Phase 3 (DFIR, cloud specialization). Stages 1–2 already cover nearly all of `blue.md` Phase 1.
+Continue with **`4_blue.md` from Phase 2** (security telemetry, queries, adversary emulation, IR playbooks), then Phase 3 (DFIR, cloud specialization). Stages 1–2 already cover nearly all of `4_blue.md` Phase 1.
 
 ---
 
