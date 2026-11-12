@@ -220,3 +220,45 @@ $ kubectl apply -f <config/crd/*.yaml> -> apply crd on k8s, verify with kubectl 
 - annotate k8s service account with iam role
 -- annotations:
     eks.amazonaws.com/role-arn: my-aws-iam-role-arn
+
+
+
+---------------------------------------
+
+node ip -> fixed single ip of the server (physical server)
+loadbalancer ip -> routes between physical nodes (lb => n1, n2, n3 || n1 + lb -> n2 + lb -> n3 + lb => kube apiserver)
+
+
+1. USER BROWSER (Internet)
+   │  Asks DNS: "Where is app.example.com?"
+   ▼
+2. DOMAIN REGISTRAR / DNS PROVIDER (e.g., Cloudflare, Namecheap)
+   │  IP Source: Public IPv4 leased from your ISP / Cloud Provider (e.g., 203.0.113.50)
+   │  Handoff: Returns DNS 'A' record -> 203.0.113.50
+   ▼
+3. EDGE ROUTER / FIREWALL (Datacenter Gateway)
+   │  IP Source: Public WAN IP (203.0.113.50) -> translated to Internal LAN IP (192.168.1.240), network rule set in our router/gateway by network addmin
+   │  Handoff: Port-forwards TCP 80/443 (NAT) OR routes directly via BGP to the cluster
+   ▼
+4. LOADBALANCER SERVICE / NODE IP (Cluster Entry Point)
+   │  IP Source:
+   │   • MetalLB / Cilium IPPool (e.g., 192.168.1.240 - unused LAN block you reserved)
+   │   • OR Node's real IP from Datacenter DHCP/Static config (e.g., 192.168.1.11)
+   │  Handoff: ARP/BGP or HostPort delivers packet to Node 1's network card
+   ▼
+5. INGRESS CONTROLLER POD (NGINX on RKE2 / HAProxy on OpenShift)
+   │  IP Source: Virtual CNI Pod IP (10.42.1.8) + bound to Host/LB Port 443
+   │  Handoff:
+   │   • Decrypts HTTPS using TLS Secret (auto-created by cert-manager via Let's Encrypt)
+   │   • Reads "Host: app.example.com" & "/api" -> matches Ingress rule -> finds target Pod IP
+   ▼
+6. CNI NETWORK LAYER (Cilium / Calico / Canal / OVN-Kubernetes)
+   │  IP Source: Cluster CIDR (10.42.0.0/16 - virtual RFC 1918 space invented in cluster config)
+   │  Handoff:
+   │   • Looks up destination Pod IP (10.42.2.15) -> sees it lives on Node 2 (192.168.1.12)
+   │   • Wraps packet in VXLAN/Geneve tunnel (or routes natively via BGP) across physical switch
+   │   • Enforces NetworkPolicy firewall rules (via eBPF maps or iptables)
+   ▼
+7. TARGET APPLICATION POD (Running on Node 2)
+      IP Source: Node 2's allocated /24 slice (10.42.2.15), assigned by CNI IPAM binary
+      Handoff: Node 2's CNI unwraps packet -> pushes through veth virtual cable into container port 8080
