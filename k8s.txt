@@ -269,3 +269,27 @@ external-dns automatically updates dns records in your domain provider, listens 
 7. TARGET APPLICATION POD (Running on Node 2)
       IP Source: Node 2's allocated /24 slice (10.42.2.15), assigned by CNI IPAM binary
       Handoff: Node 2's CNI unwraps packet -> pushes through veth virtual cable into container port 8080
+
+
+# 1. Create two isolated network stacks
+sudo ip netns add pod1
+sudo ip netns add pod2
+
+# 2. Create a virtual Ethernet cable with two ends
+sudo ip link add veth1 type veth peer name veth2
+
+# 3. Plug one end into pod1 and the other end into pod2
+sudo ip link set veth1 netns pod1
+sudo ip link set veth2 netns pod2
+
+# 4. Assign IPs and bring the interfaces up inside each namespace
+sudo ip netns exec pod1 ip addr add 10.0.0.1/24 dev veth1
+sudo ip netns exec pod1 ip link set veth1 up
+sudo ip netns exec pod2 ip addr add 10.0.0.2/24 dev veth2
+sudo ip netns exec pod2 ip link set veth2 up
+
+# 5. Ping from pod1 to pod2 across the virtual cable
+sudo ip netns exec pod1 ping -c 2 10.0.0.2
+
+# 6. Clean up
+sudo ip netns del pod1 && sudo ip netns del pod2
