@@ -5,7 +5,6 @@ resource "google_project_service" "apis" {
   for_each = toset([
     "compute.googleapis.com",
     "container.googleapis.com",
-    "cloudkms.googleapis.com",
     "iam.googleapis.com",
     "artifactregistry.googleapis.com",
   ])
@@ -86,30 +85,10 @@ resource "google_project_iam_member" "node_artifact_reader" {
 # ==============================================================================
 # 4. Cloud KMS Envelope Encryption for Kubernetes Secrets
 # ==============================================================================
-resource "google_kms_key_ring" "gke_keyring" {
-  name       = "${var.cluster_name}-keyring"
-  location   = var.region
-  depends_on = [google_project_service.apis]
-}
-
-resource "google_kms_crypto_key" "gke_secrets_key" {
-  name            = "${var.cluster_name}-secrets-key"
-  key_ring        = google_kms_key_ring.gke_keyring.id
-  rotation_period = "7776000s" # 90 days automatic rotation
-
-  lifecycle {
-    prevent_destroy = false # Set to true in live production
-  }
-}
-
-data "google_project" "current" {}
-
-resource "google_kms_crypto_key_iam_member" "gke_kms_encrypter" {
-  count = var.emulator ? 0 : 1 # Not implemented by floci-gcp
-
-  crypto_key_id = google_kms_crypto_key.gke_secrets_key.id
-  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
-  member        = "serviceAccount:service-${data.google_project.current.number}@container-engine-robot.iam.gserviceaccount.com"
+# Key ring and key are managed in ./kms (never destroyed); look the key up here.
+data "google_kms_crypto_key" "gke_secrets_key" {
+  name     = "${var.cluster_name}-secrets-key"
+  key_ring = "projects/${var.project_id}/locations/${var.region}/keyRings/${var.cluster_name}-keyring"
 }
 
 # ==============================================================================
@@ -158,7 +137,7 @@ resource "google_container_cluster" "primary" {
 
   database_encryption {
     state    = "ENCRYPTED"
-    key_name = google_kms_crypto_key.gke_secrets_key.id
+    key_name = data.google_kms_crypto_key.gke_secrets_key.id
   }
 
   logging_config {
@@ -175,7 +154,6 @@ resource "google_container_cluster" "primary" {
   depends_on = [
     google_project_service.apis,
     google_project_iam_member.node_default_role,
-    google_kms_crypto_key_iam_member.gke_kms_encrypter,
   ]
 }
 

@@ -223,7 +223,6 @@ resource "google_project_service" "apis" {
   for_each = toset([
     "compute.googleapis.com",
     "container.googleapis.com",
-    "cloudkms.googleapis.com",
     "iam.googleapis.com",
     "artifactregistry.googleapis.com",
   ])
@@ -304,30 +303,10 @@ resource "google_project_iam_member" "node_artifact_reader" {
 # ==============================================================================
 # 4. Cloud KMS Envelope Encryption for Kubernetes Secrets
 # ==============================================================================
-resource "google_kms_key_ring" "gke_keyring" {
-  name       = "${var.cluster_name}-keyring"
-  location   = var.region
-  depends_on = [google_project_service.apis]
-}
-
-resource "google_kms_crypto_key" "gke_secrets_key" {
-  name            = "${var.cluster_name}-secrets-key"
-  key_ring        = google_kms_key_ring.gke_keyring.id
-  rotation_period = "7776000s" # 90 days automatic rotation
-
-  lifecycle {
-    prevent_destroy = false # Set to true in live production
-  }
-}
-
-data "google_project" "current" {}
-
-resource "google_kms_crypto_key_iam_member" "gke_kms_encrypter" {
-  count = var.emulator ? 0 : 1 # Not implemented by floci-gcp
-
-  crypto_key_id = google_kms_crypto_key.gke_secrets_key.id
-  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
-  member        = "serviceAccount:service-${data.google_project.current.number}@container-engine-robot.iam.gserviceaccount.com"
+# Key ring and key are managed in ./kms (never destroyed); look the key up here.
+data "google_kms_crypto_key" "gke_secrets_key" {
+  name     = "${var.cluster_name}-secrets-key"
+  key_ring = "projects/${var.project_id}/locations/${var.region}/keyRings/${var.cluster_name}-keyring"
 }
 
 # ==============================================================================
@@ -376,7 +355,7 @@ resource "google_container_cluster" "primary" {
 
   database_encryption {
     state    = "ENCRYPTED"
-    key_name = google_kms_crypto_key.gke_secrets_key.id
+    key_name = data.google_kms_crypto_key.gke_secrets_key.id
   }
 
   logging_config {
@@ -393,7 +372,6 @@ resource "google_container_cluster" "primary" {
   depends_on = [
     google_project_service.apis,
     google_project_iam_member.node_default_role,
-    google_kms_crypto_key_iam_member.gke_kms_encrypter,
   ]
 }
 
@@ -462,6 +440,91 @@ output "kubeconfig_command" {
 }
 ```
 
+### `kms/` — Long-Lived KMS Layer
+
+KMS key rings and keys can **never be deleted** in GCP (or in `floci-gcp`), and their names stay reserved forever. Recreating them on every cluster rebuild fails with `409 KeyRing already exists`, so they live in a separate Terraform root that is applied once and never destroyed. The cluster root above only looks the key up with a `data` source.
+
+`kms/providers.tf` is an exact copy of `providers.tf`.
+
+#### `kms/variables.tf`
+
+```hcl
+variable "project_id" {
+  description = "GCP Project ID"
+  type        = string
+  default     = "floci-local"
+}
+
+variable "region" {
+  description = "GCP Region (must match the cluster region)"
+  type        = string
+  default     = "europe-west1"
+}
+
+variable "cluster_name" {
+  description = "Name of the GKE cluster the key is for"
+  type        = string
+  default     = "practice-gke-cluster"
+}
+
+variable "emulator" {
+  description = "Skip resources floci-gcp does not implement (KMS key IAM). Set false for real GCP."
+  type        = bool
+  default     = true
+}
+```
+
+#### `kms/main.tf`
+
+```hcl
+# Long-lived layer: KMS key rings and keys can never be deleted in GCP,
+# so they live apart from the cluster and are never destroyed.
+
+resource "google_project_service" "apis" {
+  for_each = toset([
+    "cloudkms.googleapis.com",
+    "container.googleapis.com", # Creates the GKE service agent granted below
+  ])
+
+  service            = each.key
+  disable_on_destroy = false
+}
+
+resource "google_kms_key_ring" "gke_keyring" {
+  name       = "${var.cluster_name}-keyring"
+  location   = var.region
+  depends_on = [google_project_service.apis]
+}
+
+resource "google_kms_crypto_key" "gke_secrets_key" {
+  name            = "${var.cluster_name}-secrets-key"
+  key_ring        = google_kms_key_ring.gke_keyring.id
+  rotation_period = "7776000s" # 90 days automatic rotation
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
+data "google_project" "current" {}
+
+resource "google_kms_crypto_key_iam_member" "gke_kms_encrypter" {
+  count = var.emulator ? 0 : 1 # Not implemented by floci-gcp
+
+  crypto_key_id = google_kms_crypto_key.gke_secrets_key.id
+  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+  member        = "serviceAccount:service-${data.google_project.current.number}@container-engine-robot.iam.gserviceaccount.com"
+}
+```
+
+#### `kms/outputs.tf`
+
+```hcl
+output "gke_secrets_key_id" {
+  value = google_kms_crypto_key.gke_secrets_key.id
+}
+```
+
 ---
 
 ## 6. Provision & Connect Workflow
@@ -470,12 +533,17 @@ output "kubeconfig_command" {
 # 1. Load local emulator environment variables
 source .env
 
-# 2. Initialize, validate, and apply Terraform
+# 2. Create the long-lived KMS layer (once)
+terraform -chdir=kms init
+terraform -chdir=kms apply
+
+# 3. Initialize, validate, and apply the cluster
 terraform init
 terraform validate
-terraform apply -auto-approve
+terraform plan -out=tfplan
+terraform apply tfplan
 
-# 3. Fetch kubeconfig and inspect your cluster
+# 4. Fetch kubeconfig and inspect your cluster
 gcloud container clusters get-credentials practice-gke-cluster --zone europe-west1-b
 kubectl get nodes -o wide
 kubectl get pods -A
@@ -498,9 +566,9 @@ kubectl get pods -A
   terraform state list
   terraform show
   ```
-* **Tear down Terraform resources:**
+* **Tear down the cluster (KMS layer stays; re-apply reuses the key):**
   ```bash
-  terraform destroy -auto-approve
+  terraform destroy
   ```
 * **Wipe all `floci-gcp` emulator state without restarting Docker:**
   ```bash
@@ -514,5 +582,5 @@ kubectl get pods -A
 * **Single `k3s` Container Behind GKE:** Even though `node_count = 2` is validated and stored in your GKE node pool API state, `floci-gcp` spawns a single `rancher/k3s` Docker container per cluster (`kubectl get nodes` will display 1 node).
 * **VPC Routing:** VPCs, subnets, and secondary CIDR ranges are tracked at the API level only; actual container traffic uses the host Docker network.
 * **Unimplemented APIs (`emulator = true`):** `floci-gcp` 0.12.0 returns `501` for Cloud Router/NAT and `404` for KMS key IAM policies, so those three resources are skipped locally via `count`. Set `emulator = false` for real GCP.
-* **KMS Destroy:** `floci-gcp` cannot delete KMS keys (real GCP cannot either). If `terraform destroy` fails on the key, run `terraform state rm google_kms_crypto_key.gke_secrets_key google_kms_key_ring.gke_keyring` and re-run the destroy.
+* **KMS Layer:** Never destroy `kms/` (`prevent_destroy = true` blocks it). After an emulator state reset, delete `kms/terraform.tfstate` and re-apply `kms/` before the cluster.
 * **Runtime Fidelity:** Workload Identity, private nodes, Dataplane V2, KMS secrets encryption, Shielded VMs, autoscaling, and Managed Prometheus are stored by the API but not enforced by k3s.
