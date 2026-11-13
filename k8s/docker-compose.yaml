@@ -33,5 +33,19 @@ services:
       - "5000:5000"
     restart: unless-stopped
 
+  # Forwards host 80/443 to the GKE (k3s) node, standing in for a cloud load balancer
+  ingress-proxy:
+    image: alpine/socat:1.8.0.3
+    container_name: ingress-proxy
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        socat TCP-LISTEN:80,fork,reuseaddr TCP:floci-gcp-gke-floci-local-practice-gke-cluster:80 &
+        exec socat TCP-LISTEN:443,fork,reuseaddr TCP:floci-gcp-gke-floci-local-practice-gke-cluster:443
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: unless-stopped
+
 volumes:
   floci-gcp-data:

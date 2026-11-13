@@ -66,6 +66,7 @@ cd ~/workspace/cloud/gcp-k8s
 This starts:
 * **`floci-gcp`** on port **`4588`** (handles all GCP REST/gRPC APIs and spawns real `k3s` containers for GKE).
 * **`floci-ui`** on port **`4500`** (multi-cloud browser console to inspect your GCP VPCs, GKE clusters, and IAM accounts).
+* **`ingress-proxy`** on ports **`80`/`443`** (forwards to the GKE node's Traefik LoadBalancer; stands in for the Google Cloud load balancer, see section 7).
 * **`registry`** on port **`5000`** (local OCI container registry for `docker push` / `kubectl` image pulls).
 
 ```yaml
@@ -102,6 +103,20 @@ services:
     container_name: local-registry
     ports:
       - "5000:5000"
+    restart: unless-stopped
+
+  # Forwards host 80/443 to the GKE (k3s) node, standing in for a cloud load balancer
+  ingress-proxy:
+    image: alpine/socat:1.8.0.3
+    container_name: ingress-proxy
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        socat TCP-LISTEN:80,fork,reuseaddr TCP:floci-gcp-gke-floci-local-practice-gke-cluster:80 &
+        exec socat TCP-LISTEN:443,fork,reuseaddr TCP:floci-gcp-gke-floci-local-practice-gke-cluster:443
+    ports:
+      - "80:80"
+      - "443:443"
     restart: unless-stopped
 
 volumes:
@@ -551,7 +566,181 @@ kubectl get pods -A
 
 ---
 
-## 7. Inspecting & Resetting Your Environment
+## 7. Ingress & TLS (Traefik + cert-manager)
+
+Production GKE puts a Google Cloud load balancer in front of an ingress controller (or the GKE Gateway API) and gets certificates from Let's Encrypt or Google-managed certs. Locally, `floci-gcp` has no cloud load balancer or Cloud DNS, so the same layers are built from in-cluster pieces:
+
+| Layer | Production GKE | This lab |
+| :--- | :--- | :--- |
+| External load balancer | Google Cloud LB (from `Service type: LoadBalancer` or Gateway) | k3s ServiceLB + `ingress-proxy` container on host `80`/`443` |
+| Ingress controller | Traefik / Envoy Gateway / GKE Gateway | Traefik (Helm) |
+| Certificates | cert-manager + Let's Encrypt DNS-01 (Cloud DNS via Workload Identity) | cert-manager + local root CA |
+| DNS | external-dns → Cloud DNS | `*.localtest.me` (public DNS that always resolves to `127.0.0.1`) |
+
+`floci-gcp` starts k3s with its built-in Traefik disabled, so you install and own the ingress controller yourself, as in production.
+
+### 7.1 Install Traefik and cert-manager
+
+`traefik-values.yaml` (redirect all HTTP to HTTPS):
+```yaml
+ports:
+  web:
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
+```
+
+```bash
+helm repo add traefik https://traefik.github.io/charts
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+
+helm install traefik traefik/traefik --version 42.4.0 \
+  -n traefik --create-namespace -f traefik-values.yaml --wait
+
+helm install cert-manager jetstack/cert-manager --version v1.21.3 \
+  -n cert-manager --create-namespace --set crds.enabled=true --wait
+
+kubectl get svc -n traefik   # EXTERNAL-IP is the k3s node IP (ServiceLB)
+```
+
+### 7.2 Local Certificate Authority
+
+`tls-issuers.yaml`:
+```yaml
+# 1. Bootstrap issuer that only signs the root CA
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: selfsigned
+spec:
+  selfSigned: {}
+---
+# 2. Local root CA (stored as Secret local-root-ca in cert-manager namespace)
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: local-root-ca
+  namespace: cert-manager
+spec:
+  isCA: true
+  commonName: local-root-ca
+  secretName: local-root-ca
+  duration: 87600h # 10 years
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: selfsigned
+    kind: ClusterIssuer
+---
+# 3. The issuer apps use (swap for a Let's Encrypt DNS-01 issuer in production)
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: local-ca
+spec:
+  ca:
+    secretName: local-root-ca
+```
+
+```bash
+kubectl apply -f tls-issuers.yaml
+kubectl wait --for=condition=Ready certificate/local-root-ca -n cert-manager --timeout=60s
+```
+
+### 7.3 Demo App with TLS Ingress
+
+`whoami.yaml`:
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whoami
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: whoami
+  template:
+    metadata:
+      labels:
+        app: whoami
+    spec:
+      containers:
+        - name: whoami
+          image: traefik/whoami:v1.11.0
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              memory: 32Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: whoami
+spec:
+  selector:
+    app: whoami
+  ports:
+    - port: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: whoami
+  annotations:
+    cert-manager.io/cluster-issuer: local-ca
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - whoami.localtest.me
+      secretName: whoami-tls
+  rules:
+    - host: whoami.localtest.me
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: whoami
+                port:
+                  number: 80
+```
+
+```bash
+kubectl apply -f whoami.yaml
+kubectl wait --for=condition=Ready certificate/whoami-tls --timeout=90s
+kubectl get ingress,certificate
+```
+
+### 7.4 Test
+
+```bash
+# Export the root CA so clients can verify certificates it signed
+kubectl get secret local-root-ca -n cert-manager -o jsonpath='{.data.ca\.crt}' | base64 -d > local-root-ca.crt
+
+curl -I http://whoami.localtest.me/                            # 301 -> https://
+curl --cacert local-root-ca.crt https://whoami.localtest.me/   # 200, verified TLS
+```
+
+To trust it in a Windows browser, import `local-root-ca.crt` into **Trusted Root Certification Authorities** (`certmgr.msc`). Remove it when you're done with the lab.
+
+**Going to production:** replace the `local-ca` issuer with a Let's Encrypt `ClusterIssuer` using a DNS-01 solver (Cloud DNS + Workload Identity), add external-dns, and drop `ingress-proxy` because the Traefik `LoadBalancer` Service gets a real Google Cloud LB IP.
+
+---
+
+## 8. Inspecting & Resetting Your Environment
 
 * **Browser Console (`floci-ui`):** `http://localhost:4500`
 * **`floci-gcp` API Endpoint:** `http://localhost:4588`
@@ -577,10 +766,12 @@ kubectl get pods -A
 
 ---
 
-## 8. Key Local Emulation Notes
+## 9. Key Local Emulation Notes
 
 * **Single `k3s` Container Behind GKE:** Even though `node_count = 2` is validated and stored in your GKE node pool API state, `floci-gcp` spawns a single `rancher/k3s` Docker container per cluster (`kubectl get nodes` will display 1 node).
 * **VPC Routing:** VPCs, subnets, and secondary CIDR ranges are tracked at the API level only; actual container traffic uses the host Docker network.
 * **Unimplemented APIs (`emulator = true`):** `floci-gcp` 0.12.0 returns `501` for Cloud Router/NAT and `404` for KMS key IAM policies, so those three resources are skipped locally via `count`. Set `emulator = false` for real GCP.
 * **KMS Layer:** Never destroy `kms/` (`prevent_destroy = true` blocks it). After an emulator state reset, delete `kms/terraform.tfstate` and re-apply `kms/` before the cluster.
+* **CNI:** Nothing to install. k3s ships with flannel; real GKE provides its own CNI (Dataplane V2 / Cilium via `datapath_provider`). You cannot swap the CNI on the `floci-gcp` cluster. For Cilium practice use `kind` or k3d.
+* **`ingress-proxy`:** Targets the container name of the `practice-gke-cluster` k3s node. If you change `cluster_name`, update the two `socat` targets in `docker-compose.yaml`.
 * **Runtime Fidelity:** Workload Identity, private nodes, Dataplane V2, KMS secrets encryption, Shielded VMs, autoscaling, and Managed Prometheus are stored by the API but not enforced by k3s.
