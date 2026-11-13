@@ -1,15 +1,37 @@
 services:
-  floci:
-    image: floci/floci:latest
-    container_name: floci
+  floci-gcp:
+    image: floci/floci-gcp:latest
+    container_name: floci-gcp
     ports:
-      - "4566:4566"
+      - "4588:4588"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - floci-data:/app/data
+      - floci-gcp-data:/app/data
     environment:
-      - FLOCI_STORAGE_MODE=hybrid
+      - FLOCI_GCP_STORAGE_MODE=hybrid
+      - FLOCI_GCP_DEFAULT_PROJECT_ID=floci-local
+      - FLOCI_GCP_HOSTNAME=floci-gcp
+      - FLOCI_GCP_BASE_URL=http://floci-gcp:4588
+    restart: unless-stopped
+
+  floci-ui:
+    image: floci/floci-ui:latest
+    container_name: floci-ui
+    ports:
+      - "4500:4500"
+    environment:
+      - FLOCI_GCP_ENDPOINT=http://floci-gcp:4588
+      - FLOCI_GCP_PROJECT=floci-local
+    depends_on:
+      - floci-gcp
+    restart: unless-stopped
+
+  registry:
+    image: registry:2
+    container_name: local-registry
+    ports:
+      - "5000:5000"
     restart: unless-stopped
 
 volumes:
-  floci-data:
+  floci-gcp-data:
