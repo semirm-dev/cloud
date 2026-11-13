@@ -231,7 +231,7 @@ loadbalancer ip -> routes between physical nodes (lb => n1, n2, n3 || n1 + lb ->
 traefik = ingress controller, replaces old nginx
 cilium (all in one, fast, modern, ebpf)/calico (old standard, bgp)/canal (hybrid, flannel + calico) = cni
 
-cni builds virtual network between nodes so pod-to-pod can communicate (adds route tables with ips, destinations).
+cni builds virtual network between nodes (route tables with pod ips) so pod-to-pod can communicate.
 node-to-node communicate directly because they are real machines, no cni or k8s invovled.
 external-dns automatically updates dns records in your domain provider, listens for new ingress host.
 
