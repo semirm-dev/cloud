@@ -1,6 +1,6 @@
 # Platform Engineering & DevSecOps Bootstrap Guide
 
-An end-to-end execution order for standing up a production-grade Kubernetes platform—connecting your networking (`cni.md`, `ingress-tls-cni.md`), DNS (`external-dns.md`), and security (`cicd_scan.md`) references into a single repeatable workflow.
+An end-to-end execution order for standing up a production-grade Kubernetes platform—connecting your detailed references: networking ([`cni.md`](cni.md), [`ingress.md`](ingress.md)), TLS ([`cert_manager.md`](cert_manager.md)), DNS ([`external_dns.md`](external_dns.md)), and security ([`cicd_sec.md`](cicd_sec.md)) into a single repeatable workflow.
 
 ---
 
