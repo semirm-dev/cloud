@@ -196,6 +196,7 @@ TLS on Gateway API is usually attached on the `Gateway` listeners (certificateRe
 * **Middlewares** (Traefik): security headers, rate limits, and auth as needed—attach via Ingress annotations or `IngressRoute`/`Middleware` CRDs; avoid putting business logic only in the proxy.
 * **Do not** store ACME state in Traefik’s local `acme.json` when running multiple replicas—use cert-manager Secrets ([`cert_manager.md`](cert_manager.md)).
 * **NetworkPolicy:** allow traffic from the Ingress namespace to app namespaces only (see [`cni.md`](cni.md)).
+* **Teardown:** delete the `Gateway`/LoadBalancer Service before destroying a managed cluster; the cloud load balancer it created is not in Terraform and survives the cluster otherwise.
 * **Gateway API:** set each `Gateway` listener's `allowedRoutes.namespaces.from: Selector` (with a label selector), not `All`—otherwise any namespace can attach an `HTTPRoute` and claim a hostname on the shared VIP.
 
 ---

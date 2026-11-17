@@ -67,6 +67,19 @@ platform-gitops/
   * The first sync waits on a **manual step**: `bao operator init` (recovery shares → password manager), seed the secrets ESO reads, revoke the root token. Until then OpenBao is not Ready and the ExternalSecrets retry.
 * **Wave `2` (Guardrails & workloads):** Kyverno `ClusterPolicy` (per-rule `failureAction: Audit` first) and application manifests.
 
+**Bring layers up one at a time.** Waves order a single sync, but a first sync of everything stalls on the slowest manual step (OpenBao init) and leaves later layers half-applied. Gate each layer's `Application` behind a switch in the app-of-apps values and turn them on in order, one commit each:
+
+```yaml
+# apps/values.yaml — each template wraps itself in {{- if .Values.tracks.<name> }}
+tracks:
+  gateway: true         # networking + the app's route
+  secrets: false        # cert-manager, ESO, OpenBao (needs the manual init)
+  guardrails: false     # Kyverno + policies
+  observability: false  # kube-prometheus-stack, Loki
+```
+
+A resource a layer needs from a later one (e.g. the app's `ServiceMonitor` before monitoring exists) needs its CRD applied up front, or the app sync fails.
+
 ---
 
 ## 4. Verification Checkpoints
@@ -96,3 +109,4 @@ Run these checks at each milestone before moving on:
    kubectl get policyreport,vulnerabilityreports -A
    kubectl get pods -n falco                                 # One Falco pod per node
    ```
+5. **Teardown (managed clusters):** the cloud load balancer behind a `Gateway`/`LoadBalancer` Service and the disks behind PVCs are created by the cluster, not Terraform. Delete the root `Application` (so nothing is recreated), the child Applications, Gateways and PVCs *before* destroying the cluster, or they outlive it and keep billing.
