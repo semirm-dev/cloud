@@ -82,12 +82,20 @@ ports:
       default: true
     redirectTo:
       port: websecure      # HTTP → HTTPS
+    forwardedHeaders:
+      trustedIPs: ["10.0.0.0/24"]   # LB / front-end ranges only
   websecure:
     port: 443
     expose:
       default: true
     tls:
       enabled: true
+    # Trust X-Forwarded-* only from your LB / front-end ranges: client IPs are right,
+    # and anyone else's X-Forwarded-For is discarded instead of believed
+    forwardedHeaders:
+      trustedIPs: ["10.0.0.0/24"]
+    # proxyProtocol:               # Only if the LB sends PROXY protocol
+    #   trustedIPs: ["10.0.0.0/24"]
 
 ingressClass:
   enabled: true
@@ -188,6 +196,7 @@ TLS on Gateway API is usually attached on the `Gateway` listeners (certificateRe
 * **Middlewares** (Traefik): security headers, rate limits, and auth as needed—attach via Ingress annotations or `IngressRoute`/`Middleware` CRDs; avoid putting business logic only in the proxy.
 * **Do not** store ACME state in Traefik’s local `acme.json` when running multiple replicas—use cert-manager Secrets ([`cert_manager.md`](cert_manager.md)).
 * **NetworkPolicy:** allow traffic from the Ingress namespace to app namespaces only (see [`cni.md`](cni.md)).
+* **Gateway API:** set each `Gateway` listener's `allowedRoutes.namespaces.from: Selector` (with a label selector), not `All`—otherwise any namespace can attach an `HTTPRoute` and claim a hostname on the shared VIP.
 
 ---
 
