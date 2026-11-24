@@ -240,7 +240,7 @@ Cloud Router + Cloud NAT: Regional control plane + SNAT gateway enabling outboun
 
 Cloud Load Balancer + Cloud DNS + TLS: Public HTTPS front door routing inbound user traffic directly to Pods via Network Endpoint Groups (NEGs).
 
-VPC Firewall Rules: East-west traffic control allowing Google Load Balancer health probes (35.191.0.0/16, 130.211.0.0/22) and IAP SSH (35.235.240.0/20) while isolating internal tiers.
+VPC Firewall Rules: Ingress traffic control allowing Google Load Balancer health probes (35.191.0.0/16, 130.211.0.0/22) and IAP SSH (35.235.240.0/20) while isolating internal tiers.
 
 Private Service Access: private VPC Network Peering tunnel between your VPC and Google's managed-service VPC
 
