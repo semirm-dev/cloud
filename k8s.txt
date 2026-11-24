@@ -224,3 +224,18 @@ $ kubectl apply -f <config/crd/*.yaml> -> apply crd on k8s, verify with kubectl 
 
 
 ---------------------------------------
+
+Cloud NAT gateways (like GCP Cloud NAT, AWS NAT Gateway, and Azure NAT Gateway) are strictly for outbound-initiated traffic.
+Technically, NAT works in both directions for a single established connection:
+- Outbound (SNAT — Source NAT): Your private VM (10.10.0.5) sends a request to api.stripe.com. 
+Cloud NAT rewrites the source IP to its public NAT IP and records the connection in a temporary mapping table.
+- Return Inbound (DNAT — Destination NAT): When api.stripe.com sends the HTTP response back, 
+Cloud NAT checks its mapping table, sees it belongs to an existing outbound session, and forwards the reply back to 10.10.0.5.
+
+However, if a random client on the internet tries to initiate a new, unsolicited inbound connection to that NAT public IP, 
+Cloud NAT drops it immediately because there is no matching outbound entry in its table.
+
+How Inbound User Traffic Actually Enters (If Not Through NAT)?
+Because Cloud NAT blocks unsolicited inbound connections, cloud architectures split ingress and egress into two completely separate paths:
+- Outbound Traffic (Egress): Private Pods/VMs -> Cloud NAT -> External Internet
+- Inbound Traffic (Ingress): Internet Users -> Cloud Load Balancer (which holds a public IP and TLS certificate) -> Private GKE Pods/VMs (10.10.x.x / 10.20.x.x)
