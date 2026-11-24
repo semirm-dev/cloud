@@ -225,6 +225,37 @@ $ kubectl apply -f <config/crd/*.yaml> -> apply crd on k8s, verify with kubectl 
 
 ---------------------------------------
 
+
+
+Production Cloud & GKE Reference Stack
+1. Foundation (Network & Compute)
+
+VPC & Subnets: Isolated network carved from 10.0.0.0/8 with non-overlapping CIDRs (Non-Prod vs. Prod VPCs; separate ranges for Nodes, Pods, and Services).
+
+GKE Worker Nodes (VMs): Private compute instances (no public IPs) running containerized microservices.
+
+2. Traffic & Connectivity
+
+Cloud Router + Cloud NAT: Regional control plane + SNAT gateway enabling outbound internet access (image pulls, external APIs) from private nodes.
+
+Cloud Load Balancer + Cloud DNS + TLS: Public HTTPS front door routing inbound user traffic directly to Pods via Network Endpoint Groups (NEGs).
+
+VPC Firewall Rules: East-west traffic control allowing Google Load Balancer health probes (35.191.0.0/16, 130.211.0.0/22) and IAP SSH (35.235.240.0/20) while isolating internal tiers.
+
+Private Service Access: Internal VPC peering connecting GKE Pods privately to managed databases (Cloud SQL, Memorystore Redis).
+
+3. Security, Delivery & Operations
+
+IAM & Workload Identity: Binds Kubernetes ServiceAccounts to dedicated GCP IAM roles so Pods access Secret Manager/Storage without static JSON keys.
+
+Artifact Registry: Regional private container registry storing microservice Docker images.
+
+GitOps (ArgoCD / Flux): Continuous delivery syncing Helm charts/manifests from Git into dev, stg, and prod clusters.
+
+Observability: Cloud Logging, Cloud Monitoring (or Prometheus/Grafana/OpenTelemetry), and billing budget alerts.
+
+---------
+
 Cloud NAT gateways (like GCP Cloud NAT, AWS NAT Gateway, and Azure NAT Gateway) are strictly for outbound-initiated traffic.
 Technically, NAT works in both directions for a single established connection:
 - Outbound (SNAT — Source NAT): Your private VM (10.10.0.5) sends a request to api.stripe.com. 
